@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "22368e5e-7339-46a2-bfb8-63d39873e9f0",
+		"name": "Project3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://customer-api-p3.herokuapp.com/api/customers",
+					"protocol": "https",
+					"host": [
+						"customer-api-p3",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Customer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"LiMu Emu23\",\n    \"address\": \"150 Liberty Way\",\n    \"address2\": \"PO Box 23\",\n    \"city\": \"Dover\",\n    \"state\": \"NH\",\n    \"country\": \"United States\",\n    \"owner\": \"lkj34lk23234\",\n    \"postal\": \"03820\",\n    \"active\": true,\n    \"package\": \"gold\"\n}"
+				},
+				"url": {
+					"raw": "https://customer-api-p3.herokuapp.com/api/customers",
+					"protocol": "https",
+					"host": [
+						"customer-api-p3",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Customer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"LiMu Emu\",\n    \"address\": \"150 Liberty Way\",\n    \"address2\": \"PO Box 23\",\n    \"city\": \"Dover\",\n    \"state\": \"NH\",\n    \"country\": \"United States\",\n    \"owner\": \"lkj34lk23234\",\n    \"postal\": \"03820\",\n    \"active\": true,\n    \"package\": \"gold\"\n}"
+				},
+				"url": {
+					"raw": "https://customer-api-p3.herokuapp.com/api/customers/5c75f0d8586ff7002192aef1",
+					"protocol": "https",
+					"host": [
+						"customer-api-p3",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"5c75f0d8586ff7002192aef1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Customer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"package\": \"silver\"\n}"
+				},
+				"url": {
+					"raw": "https://customer-api-p3.herokuapp.com/api/customers/5c75f0d8586ff7002192aef1",
+					"protocol": "https",
+					"host": [
+						"customer-api-p3",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"5c75f0d8586ff7002192aef1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Customer",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"package\": \"silver\"\n}"
+				},
+				"url": {
+					"raw": "https://customer-api-p3.herokuapp.com/api/customers/5c75f0d8586ff7002192aef1",
+					"protocol": "https",
+					"host": [
+						"customer-api-p3",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"5c75f0d8586ff7002192aef1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Customer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"LiMu Emu\",\n    \"address\": \"150 Liberty Way\",\n    \"address2\": \"PO Box 23\",\n    \"city\": \"Dover\",\n    \"state\": \"NH\",\n    \"country\": \"United States\",\n    \"owner\": \"lkj34lk23234\",\n    \"postal\": \"03820\",\n    \"active\": true,\n    \"package\": \"gold\"\n}"
+				},
+				"url": {
+					"raw": "https://customer-api-p3.herokuapp.com/api/customers/5c75effe586ff7002192aeef",
+					"protocol": "https",
+					"host": [
+						"customer-api-p3",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"5c75effe586ff7002192aeef"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
