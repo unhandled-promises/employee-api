@@ -5,9 +5,9 @@ export declare module App {
     export interface Employee {
         company: Schema.Types.ObjectId;
         device: {
+            consent: boolean;
             manufacturer: string;
             type: string;
-            consent: boolean;
         }
         dob: Date;
         email: string;

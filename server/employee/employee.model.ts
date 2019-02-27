@@ -10,14 +10,14 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
         type: Schema.Types.ObjectId,
     },
     device: {
+        consent: {
+            type: Boolean,
+        },
         manufacturer: {
             type: String,
         },
         type: {
             type: String,
-        },
-        consent: {
-            type: Boolean,
         },
     },
     dob: {

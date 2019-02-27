@@ -25,9 +25,9 @@ describe("/api/employee tests", () => {
         const employee = {
             company: "5c768ea0ca379cfc5b1be974",
             device: {
+                consent: true,
                 manufacturer: "Fitbit",
                 type: "Charge 3",
-                consent: true,
             },
             dob: new Date(),
             email: "figginsc@gmail.com",
@@ -79,9 +79,9 @@ describe("/api/employee tests", () => {
         const newEmployee = {
             company: "5c768ea0ca379cfc5b1be964",
             device: {
+                consent: true,
                 manufacturer: "Fitbit",
                 type: "Charge 3",
-                consent: true,
             },
             dob: new Date(),
             email: "figgin@gmail.com",
@@ -108,9 +108,9 @@ describe("/api/employee tests", () => {
         const newEmployee = {
             company: "5c768ea0ca379cfc5b1be964",
             device: {
+                consent: true,
                 manufacturer: "Fitbit",
                 type: "Charge 3",
-                consent: true,
             },
             dob: new Date(),
             email: "figginsc@gmail.com",
