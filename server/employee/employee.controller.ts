@@ -36,6 +36,17 @@ router.route("/:id").get(async (request, response) => {
     }
 });
 
+router.route("/bycustomer/:id").get(async (request, response) => {
+    try {
+        const customerId = request.params.id;
+        const employees = await Employee.find({ company: customerId });
+        return response.status(200).json(employees);
+    } catch (error) {
+        console.log(error);
+        return response.status(404).send(error);
+    }
+});
+
 router.route("/:id").delete(async (request, response) => {
     try {
         const employeeId = request.params.id;

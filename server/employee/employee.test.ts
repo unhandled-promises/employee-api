@@ -66,6 +66,17 @@ describe("/api/employee tests", () => {
     });
 
     // Unit Test
+    it("should get an employee by company id", async () => {
+        const employeeInfo = await Employee.findOne({ last_name: "Figgins" });
+
+        const response = await request(app)
+            .get(`/api/employee/bycustomer/${employeeInfo.company}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual([expect.objectContaining({ company: "5c768ea0ca379cfc5b1be974", role: "owner" })]);
+    });
+
+    // Unit Test
     it("should not find a employee", async () => {
 
         const response = await request(app)
