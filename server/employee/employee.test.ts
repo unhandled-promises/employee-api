@@ -39,6 +39,7 @@ describe("/api/employee tests", () => {
             },
             role: "owner",
             sms_consent: true,
+            token: "abcdef",
         };
 
         const newEmployee = new Employee(employee);
@@ -77,6 +78,14 @@ describe("/api/employee tests", () => {
     });
 
     // Unit Test
+    it("should not get an employee by company id", async () => {
+        const response = await request(app)
+            .get(`/api/employee/bycustomer/lkjlkjlkjklj-klj*`);
+
+        expect(response.status).toBe(404);
+    });
+
+    // Unit Test
     it("should not find a employee", async () => {
 
         const response = await request(app)
@@ -104,6 +113,7 @@ describe("/api/employee tests", () => {
             },
             role: "owner",
             sms_consent: true,
+            token: "abcdef",
         };
 
         const response = await request(app)
@@ -133,6 +143,7 @@ describe("/api/employee tests", () => {
             },
             role: "owner",
             sms_consent: true,
+            token: "abcdef",
         };
 
         const response = await request(app)

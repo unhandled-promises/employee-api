@@ -50,6 +50,9 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
     sms_consent: {
         type: Boolean,
     },
+    token: {
+        type: String,
+    },
 };
 
 // Define model schema

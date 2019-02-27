@@ -19,6 +19,7 @@ export declare module App {
         }
         role: string;
         sms_consent: boolean;
+        token: string;
     }
 
 }
