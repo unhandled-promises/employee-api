@@ -17,6 +17,7 @@ export declare module App {
         preferences: {
             launchpage: string;
         }
+        registered: boolean;
         role: string;
         sms_consent: boolean;
         token: string;

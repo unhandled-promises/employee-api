@@ -44,6 +44,9 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
             type: String,
         },
     },
+    registered: {
+        type: Boolean,
+    },
     role: {
         type: String,
     },

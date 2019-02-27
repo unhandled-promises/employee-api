@@ -37,6 +37,7 @@ describe("/api/employee tests", () => {
             preferences: {
                 launchpage: "dashboard",
             },
+            registered: true,
             role: "owner",
             sms_consent: true,
             token: "abcdef",
@@ -111,6 +112,7 @@ describe("/api/employee tests", () => {
             preferences: {
                 launchpage: "dashboard",
             },
+            registered: true,
             role: "owner",
             sms_consent: true,
             token: "abcdef",
@@ -141,6 +143,7 @@ describe("/api/employee tests", () => {
             preferences: {
                 launchpage: "dashboard",
             },
+            registered: true,
             role: "owner",
             sms_consent: true,
             token: "abcdef",
