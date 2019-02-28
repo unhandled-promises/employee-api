@@ -19,6 +19,7 @@ export declare module App {
         }
         registered: boolean;
         role: string;
+        schedule: Array<object>;
         sms_consent: boolean;
         token: string;
     }

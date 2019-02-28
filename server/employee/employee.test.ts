@@ -39,6 +39,43 @@ describe("/api/employee tests", () => {
             },
             registered: true,
             role: "owner",
+            schedule: [
+                {
+                    end: null,
+                    start: null,
+                    working: false
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: null,
+                    start: null,
+                    working: false
+                },
+            ],
             sms_consent: true,
             token: "abcdef",
         };
@@ -114,6 +151,43 @@ describe("/api/employee tests", () => {
             },
             registered: true,
             role: "owner",
+            schedule: [
+                {
+                    end: null,
+                    start: null,
+                    working: false
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: null,
+                    start: null,
+                    working: false
+                },
+            ],
             sms_consent: true,
             token: "abcdef",
         };
@@ -145,6 +219,43 @@ describe("/api/employee tests", () => {
             },
             registered: true,
             role: "owner",
+            schedule: [
+                {
+                    end: null,
+                    start: null,
+                    working: false
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: "08:00:00",
+                    start: "17:00:00",
+                    working: true
+                },
+                {
+                    end: null,
+                    start: null,
+                    working: false
+                },
+            ],
             sms_consent: true,
             token: "abcdef",
         };

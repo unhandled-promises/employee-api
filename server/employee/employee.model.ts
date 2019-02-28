@@ -3,7 +3,7 @@ import { SchemaDef } from "../../types";
 import { App } from "../../types/index";
 
 // Declare model interface
-interface IEmployeeDoc extends App.Employee, Document {}
+interface IEmployeeDoc extends App.Employee, Document { }
 
 const employeeSchemaDef: SchemaDef<App.Employee> = {
     company: {
@@ -50,6 +50,22 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
     role: {
         type: String,
     },
+    schedule: [
+        {
+            end: {
+                default: null,
+                type: String || null,
+            },
+            start: {
+                default: null,
+                type: String || null,
+            },
+            working: {
+                default: false,
+                type: Boolean,
+            },
+        }
+    ],
     sms_consent: {
         type: Boolean,
     },
