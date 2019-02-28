@@ -1,4 +1,5 @@
 # Individual Files
+.env
 .gitignore
 package-lock.json
 yarn.lock

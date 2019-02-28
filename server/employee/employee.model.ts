@@ -36,6 +36,9 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
     last_name: {
         type: String,
     },
+    password: {
+        type: String,
+    },
     phone: {
         type: String,
     },
@@ -48,6 +51,7 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
         type: Boolean,
     },
     role: {
+        required: true,
         type: String,
     },
     schedule: [

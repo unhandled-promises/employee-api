@@ -33,6 +33,7 @@ describe("/api/employee tests", () => {
             email: "figginsc@gmail.com",
             first_name: "Chris",
             last_name: "Figgins",
+            password: "fa608e60685065",
             phone: "5555325252",
             preferences: {
                 launchpage: "dashboard",
@@ -88,6 +89,17 @@ describe("/api/employee tests", () => {
     it("should get all employees", async () => {
         const response = await request(app)
             .get("/api/employee/");
+
+        const creds = {
+            password: "lkjlkjk",
+            email: "figginsc@gmail.com"
+        };
+
+        const response2 = await request(app)
+            .post("/api/employee/login")
+            .send(creds);
+
+        console.log(response2);
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual([expect.objectContaining({ company: "5c768ea0ca379cfc5b1be974", role: "owner" })]);

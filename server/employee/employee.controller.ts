@@ -1,8 +1,28 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import Employee from "./employee.model";
+import Encryption from "../util/crypto";
+import Token from "../util/jwt";
 
 const router = express.Router();
+
+router.route("/login").post(bodyParser.json(), async (request, response) => {
+    try {
+        const password = Encryption.encrypt(request.body.password);
+        const email = request.body.email;
+
+        const employee = await Employee.findOne({ email: email, password: password });
+
+        if (employee) {
+            const token = Token.sign(employee);
+            return response.status(200).json(token);
+        } else {
+            throw Error;
+        }
+    } catch (error) {
+        return response.status(401).send("Login Failed");
+    }
+});
 
 router.route("/").get(async (request, response) => {
     try {
