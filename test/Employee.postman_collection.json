@@ -234,6 +234,33 @@
 					"response": []
 				},
 				{
+					"name": "Get All Employees ByCompany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://employee-api-p3.herokuapp.com/api/employee/bycustomer/5c768ea0ca379cfc5b1be941",
+							"protocol": "https",
+							"host": [
+								"employee-api-p3",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"employee",
+								"bycustomer",
+								"5c768ea0ca379cfc5b1be941"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Employee",
 					"request": {
 						"method": "POST",
@@ -247,7 +274,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"company\": \"5c768ea0ca379cfc5b1be964\",\n    \"device\": {\n        \"consent\": true,\n        \"manufacturer\": \"Fitbit\",\n        \"type\": \"Charge 3\"\n    },\n    \"dob\": \"Wed Feb 27 2019 10:41:12 GMT-0500 (Eastern Standard Time)\",\n    \"email\": \"figgin@gmail.com\",\n    \"first_name\": \"Chris\",\n    \"last_name\": \"Figgins\",\n    \"phone\": \"5555325252\",\n    \"preferences\": {\n        \"launchpage\": \"dashboard\"\n    },\n    \"role\": \"owner\",\n    \"sms_consent\": true\n}"
+							"raw": "{\n    \"company\": \"5c768ea0ca379cfc5b1be941\",\n    \"device\": {\n        \"consent\": true,\n        \"manufacturer\": \"Fitbit\",\n        \"type\": \"Charge 3\"\n    },\n    \"dob\": \"Wed Feb 27 2019 10:41:12 GMT-0500 (Eastern Standard Time)\",\n    \"email\": \"newcompsdf@gmail.com\",\n    \"first_name\": \"Chris\",\n    \"last_name\": \"Company\",\n    \"phone\": \"5555325252\",\n    \"preferences\": {\n        \"launchpage\": \"dashboard\"\n    },\n    \"registered\": true,\n    \"role\": \"owner\",\n    \"schedule\": [\n\t    {\n\t        \"end\": null,\n\t        \"start\": null,\n\t        \"working\": false\n\t    },\n\t    {\n\t        \"end\": \"08:00:00\",\n\t        \"start\": \"17:00:00\",\n\t        \"working\": true\n\t    },\n\t    {\n\t        \"end\": \"08:00:00\",\n\t        \"start\": \"17:00:00\",\n\t        \"working\": true\n\t    },\n\t    {\n\t        \"end\": \"08:00:00\",\n\t        \"start\": \"17:00:00\",\n\t        \"working\": true\n\t    },\n\t    {\n\t        \"end\": \"08:00:00\",\n\t        \"start\": \"17:00:00\",\n\t        \"working\": true\n\t    },\n\t    {\n\t        \"end\": \"08:00:00\",\n\t        \"start\": \"17:00:00\",\n\t        \"working\": true\n\t    },\n\t    {\n\t        \"end\": null,\n\t        \"start\": null,\n\t        \"working\": false\n\t    }\n\t],\n\t\"sms_consent\": true,\n\t\"token\": \"lkjaklsdfj83lkj\"\n}"
 						},
 						"url": {
 							"raw": "https://employee-api-p3.herokuapp.com/api/employee",
@@ -282,7 +309,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://employee-api-p3.herokuapp.com/api/employee/5c76afe15b0f2700210d5a71",
+							"raw": "https://employee-api-p3.herokuapp.com/api/employee/5c77ea47c00715002110438a",
 							"protocol": "https",
 							"host": [
 								"employee-api-p3",
@@ -292,7 +319,7 @@
 							"path": [
 								"api",
 								"employee",
-								"5c76afe15b0f2700210d5a71"
+								"5c77ea47c00715002110438a"
 							]
 						}
 					},
