@@ -64,7 +64,7 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
                 default: false,
                 type: Boolean,
             },
-        }
+        },
     ],
     sms_consent: {
         type: Boolean,

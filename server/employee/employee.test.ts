@@ -43,37 +43,37 @@ describe("/api/employee tests", () => {
                 {
                     end: null,
                     start: null,
-                    working: false
+                    working: false,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: null,
                     start: null,
-                    working: false
+                    working: false,
                 },
             ],
             sms_consent: true,
@@ -155,37 +155,37 @@ describe("/api/employee tests", () => {
                 {
                     end: null,
                     start: null,
-                    working: false
+                    working: false,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: null,
                     start: null,
-                    working: false
+                    working: false,
                 },
             ],
             sms_consent: true,
@@ -223,37 +223,37 @@ describe("/api/employee tests", () => {
                 {
                     end: null,
                     start: null,
-                    working: false
+                    working: false,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: "08:00:00",
                     start: "17:00:00",
-                    working: true
+                    working: true,
                 },
                 {
                     end: null,
                     start: null,
-                    working: false
+                    working: false,
                 },
             ],
             sms_consent: true,
