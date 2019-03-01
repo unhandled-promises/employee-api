@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 import * as express from "express";
+import Token from "./util/jwt";
 
 // Put dotenv in use before importing controllers
 dotenv.config();
@@ -28,5 +29,8 @@ app.use(allowCrossDomain);
 
 // Assign controllers to routes
 app.use("/api/employee", employeeController);
+
+// Init Token
+Token.init();
 
 export default app;

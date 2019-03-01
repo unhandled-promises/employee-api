@@ -5,8 +5,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 // Nodejs encryption with CTR
-const algorithm = process.env.pwAlgorithm;
-const secret = process.env.pwSecret;
+const algorithm = process.env.PW_ALG;
+const secret = process.env.PW_SEC;
 
 export default class Encryption {
     public static encrypt = (value: string) => {

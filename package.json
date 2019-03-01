@@ -46,7 +46,7 @@
     "@types/mongoose": "^5.3.17",
     "@types/node": "^11.9.4",
     "@types/supertest": "^2.0.7",
-    "coveralls":"^3.0.2",
+    "coveralls": "^3.0.2",
     "jest": "^24.1.0",
     "mongodb-memory-server": "^3.1.1",
     "nodemon-webpack-plugin": "^4.0.7",
@@ -60,6 +60,7 @@
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
+    "aws-sdk": "^2.412.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",

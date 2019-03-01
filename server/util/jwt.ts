@@ -1,3 +1,4 @@
+import * as AWS from "aws-sdk";
 import * as dotenv from "dotenv";
 import * as express from "express";
 import * as jwt from "jsonwebtoken";
@@ -7,39 +8,72 @@ import { App } from "../../types/index";
 // Put dotenv in use before importing controllers
 dotenv.config();
 
-// Nodejs encryption with CTR
-const privateKey = process.env.privateKey;
-const publicKey = process.env.publicKey;
-
 // Declare model interface
 interface IEmployeeDoc extends App.Employee, Document { }
 
 export default class Token {
-    public static sign = (employee: IEmployeeDoc) => {
-        console.log("Sign");
-        console.log(privateKey);
-        console.log(publicKey);
-        console.log(employee);
-        const token = jwt.sign(
-            {
-                _id: employee._id,
-                company: employee.company,
-                email: employee.email,
-                role: employee.role,
-            },
-            privateKey, { algorithm: "RS256" });
+    public static async init() {
+        try {
+            // Configure AWS
+            AWS.config.update({ region: "us-east-1" });
 
-        console.log(token);
-        console.log("Past Token");
+            const privKeyParams = {
+                Bucket: "sst-p3",
+                Key: "jwtRS256.key",
+            };
 
-        return token;
+            const pubKeyParams = {
+                Bucket: "sst-p3",
+                Key: "jwtRS256.key.pub",
+            };
+
+            const s3 = new AWS.S3();
+            s3.getObject(privKeyParams, (err, data) => {
+                if (err) {
+                    throw Error;
+                }
+
+                this.privateKey = data.Body.toString();
+            });
+
+            s3.getObject(pubKeyParams, (err, data) => {
+                if (err) {
+                    throw Error;
+                }
+
+                this.publicKey = data.Body.toString();
+            });
+
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
-    public static authenticate = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+    public static sign(employee: IEmployeeDoc) {
+        try {
+            const token = jwt.sign(
+                {
+                    company: employee.company,
+                    email: employee.email,
+                    id: employee._id,
+                    role: employee.role,
+                },
+                this.privateKey, { algorithm: "RS256" });
+
+            return token;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+
+    public static authenticate(request: express.Request, response: express.Response, next: express.NextFunction) {
         try {
             const token = request.headers.authorization;
 
-            jwt.verify(token, publicKey, { algorithms: ["RS256"] }, (err, payload) => {
+            jwt.verify(token, this.publicKey, { algorithms: ["RS256"] }, (err, payload) => {
                 if (err) {
                     throw err;
                 }
@@ -50,7 +84,10 @@ export default class Token {
         }
     }
 
-    public static authorization = () => {
+    public static authorize = () => {
         return "hi";
     }
+
+    private static privateKey: jwt.Secret;
+    private static publicKey: jwt.GetPublicKeyOrSecret | string;
 }
