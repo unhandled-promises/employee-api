@@ -43,6 +43,6 @@ export default class Token {
     }
 
     public static authorization = () => {
-
+        return "hi";
     }
 }
