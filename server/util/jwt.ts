@@ -38,7 +38,7 @@ export default class Token {
                 return next();
             });
         } catch (error) {
-            return next(error);
+            return response.status(401).send("Verification Failed");
         }
     }
 }

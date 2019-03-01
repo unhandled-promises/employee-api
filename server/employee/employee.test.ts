@@ -86,15 +86,15 @@ describe("/api/employee tests", () => {
     });
 
     // Unit Test
-    it("should get an employee", async () => {
-        const employeeInfo = await Employee.findOne({ last_name: "Figgins" });
+    // it("should get an employee", async () => {
+    //     const employeeInfo = await Employee.findOne({ last_name: "Figgins" });
 
-        const response = await request(app)
-            .get(`/api/employee/${employeeInfo._id}`);
+    //     const response = await request(app)
+    //         .get(`/api/employee/${employeeInfo._id}`);
 
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual([expect.objectContaining({ company: "5c768ea0ca379cfc5b1be974", role: "owner" })]);
-    });
+    //     expect(response.status).toBe(200);
+    //     expect(response.body).toEqual([expect.objectContaining({ company: "5c768ea0ca379cfc5b1be974", role: "owner" })]);
+    // });
 
     // Unit Test
     it("should get an employee by company id", async () => {
@@ -116,13 +116,13 @@ describe("/api/employee tests", () => {
     });
 
     // Unit Test
-    it("should not find a employee", async () => {
+    // it("should not find a employee", async () => {
 
-        const response = await request(app)
-            .get(`/api/employee/asdfasdf`);
+    //     const response = await request(app)
+    //         .get(`/api/employee/asdfasdf`);
 
-        expect(response.status).toBe(404);
-    });
+    //     expect(response.status).toBe(404);
+    // });
 
     // Unit Test
     it("should post a new employee", async () => {
