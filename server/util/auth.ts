@@ -73,19 +73,38 @@ export default class Token {
         try {
             const token = request.headers.authorization;
 
-            jwt.verify(token, this.publicKey, { algorithms: ["RS256"] }, (err, payload) => {
+            jwt.verify(token, Token.publicKey, { algorithms: ["RS256"] }, (err, payload) => {
                 if (err) {
                     throw err;
                 }
+
+                request.token = payload;
                 return next();
             });
         } catch (error) {
-            return response.status(401).send("Authentication Failed!");
+            return response.status(401).json("Access Denied!");
         }
     }
 
-    public static authorize = () => {
-        return "hi";
+    public static authorize = (authCheck: string, request: express.Request) => {
+        let validityCheck = false;
+
+        switch (authCheck) {
+            case "id":
+                if (request.token.id === request.params.id) {
+                    validityCheck = true;
+                }
+                break;
+            case "customer":
+                if (request.token.company === request.params.id && (request.token.role === "owner" || request.token.role === "manager")) {
+                    validityCheck = true;
+                }
+                break;
+            default:
+                break;
+        }
+
+        return validityCheck;
     }
 
     private static privateKey: jwt.Secret;

@@ -1,7 +1,7 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
+import Token from "../util/auth";
 import Encryption from "../util/crypto";
-import Token from "../util/jwt";
 import Employee from "./employee.model";
 
 const router = express.Router();
@@ -14,19 +14,24 @@ router.route("/login").post(bodyParser.json(), async (request, response) => {
         const employee = await Employee.findOne({ email, password });
 
         if (employee) {
-            const jwtToken = await Token.sign(employee);
-            return response.status(200).json(
-                {
-                    message: "Authentication Successful!",
-                    success: true,
-                    token: jwtToken,
-                },
-            );
+            if (employee.registered) {
+                const jwtToken = await Token.sign(employee);
+                return response.status(200).json(
+                    {
+                        message: "Authentication Successful!",
+                        success: true,
+                        token: jwtToken,
+                    },
+                );
+            } else {
+                throw Error("Not Verified");
+            }
         } else {
-            throw Error;
+            throw Error("Login Failed");
         }
     } catch (error) {
-        return response.status(401).send("Login Failed");
+        console.log(error);
+        return response.status(401).json(error.toString());
     }
 });
 
@@ -38,7 +43,7 @@ router.route("/verify").post(bodyParser.json(), async (request, response) => {
         const employee = await Employee.findOne({ email, token });
 
         if (employee) {
-            await Employee.update({ _id: employee._id }, { registered: true }, {new: true});
+            await Employee.update({ _id: employee._id }, { registered: true }, { new: true });
 
             const jwtToken = await Token.sign(employee);
             return response.status(200).json(
@@ -52,58 +57,76 @@ router.route("/verify").post(bodyParser.json(), async (request, response) => {
             throw Error;
         }
     } catch (error) {
-        return response.status(401).send("Verification Failed");
+        return response.status(401).json("Verification Failed");
     }
 });
 
 router.route("/").post(bodyParser.json(), async (request, response) => {
     try {
         const employee = new Employee(request.body);
+        employee.password = Encryption.encrypt(request.body.password);
+
         await employee.save();
-        return response.status(201).json("Employee saved!");
+        return response.status(201).json("Employee created!");
     } catch (error) {
-        return response.status(400).send(error);
+        return response.status(400).json("Employee not created");
     }
 });
 
-router.route("/:id").get(Token.authenticate, async (request, response) => {
+router.route("/:id").get(Token.authenticate, async (request, response, next) => {
     try {
-        const employeeId = request.params.id;
-        const employees = await Employee.find({ _id: employeeId });
-        return response.status(200).json(employees);
+        if (Token.authorize("id", request)) {
+            const employeeId = request.params.id;
+            const employees = await Employee.find({ _id: employeeId });
+            return response.status(200).json(employees);
+        } else {
+            throw Error("No Access");
+        }
     } catch (error) {
-        return response.status(404).send(error);
+        return response.status(404).json(error.toString());
     }
 });
 
-router.route("/bycustomer/:id").get(async (request, response) => {
+router.route("/bycustomer/:id").get(Token.authenticate, async (request, response) => {
     try {
-        const customerId = request.params.id;
-        const employees = await Employee.find({ company: customerId });
-        return response.status(200).json(employees);
+        if (Token.authorize("customer", request)) {
+            const customerId = request.params.id;
+            const employees = await Employee.find({ company: customerId });
+            return response.status(200).json(employees);
+        } else {
+            throw Error("No Access");
+        }
     } catch (error) {
-        return response.status(404).send(error);
+        return response.status(404).json(error.toString());
     }
 });
 
-router.route("/:id").delete(async (request, response) => {
+router.route("/:id").delete(Token.authenticate, async (request, response) => {
     try {
-        const employeeId = request.params.id;
-        await Employee.findOneAndRemove({ _id: employeeId });
-        return response.status(202).json("Employee deleted!");
+        if (Token.authorize("id", request)) {
+            const employeeId = request.params.id;
+            await Employee.findOneAndRemove({ _id: employeeId });
+            return response.status(202).json("Employee deleted!");
+        } else {
+            throw Error("No Access");
+        }
     } catch (error) {
-        return response.status(404).send(error);
+        return response.status(404).json(error.toString());
     }
 });
 
-router.route("/:id").put(bodyParser.json(), async (request, response) => {
+router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        const employeeId = request.params.id;
-        const employeeUpdate = request.body;
-        await Employee.update({ _id: employeeId }, employeeUpdate, {new: true});
-        return response.status(202).json("Employee updated!");
+        if (Token.authorize("id", request)) {
+            const employeeId = request.params.id;
+            const employeeUpdate = request.body;
+            await Employee.update({ _id: employeeId }, employeeUpdate, { new: true });
+            return response.status(202).json("Employee updated!");
+        } else {
+            throw Error("No Access");
+        }
     } catch (error) {
-        return response.status(404).send(error);
+        return response.status(404).json(error.toString());
     }
 });
 

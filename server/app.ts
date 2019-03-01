@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 import * as express from "express";
-import Token from "./util/jwt";
+import Token from "./util/auth";
 
 // Put dotenv in use before importing controllers
 dotenv.config();
