@@ -14,7 +14,7 @@ router.route("/login").post(bodyParser.json(), async (request, response) => {
         const employee = await Employee.findOne({ email, password });
 
         if (employee) {
-            const jwtToken = Token.sign(employee);
+            const jwtToken = await Token.sign(employee);
             return response.status(200).json(
                 {
                     message: "Authentication Successful!",
@@ -37,12 +37,10 @@ router.route("/verify").post(bodyParser.json(), async (request, response) => {
 
         const employee = await Employee.findOne({ email, token });
 
-        console.log(employee);
-
         if (employee) {
             await Employee.update({ _id: employee._id }, { registered: true }, {new: true});
 
-            const jwtToken = Token.sign(employee);
+            const jwtToken = await Token.sign(employee);
             return response.status(200).json(
                 {
                     message: "Authentication Successful!",

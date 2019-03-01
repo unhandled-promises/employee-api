@@ -8,8 +8,8 @@ import { App } from "../../types/index";
 dotenv.config();
 
 // Nodejs encryption with CTR
-const privateKey = process.env.privateKey;
-const publicKey = process.env.publicKey;
+const privateKey = process.env.privateKey || process.env.PRIV_KEY;
+const publicKey = process.env.publicKey || process.env.PUB_KEY;
 
 // Declare model interface
 interface IEmployeeDoc extends App.Employee, Document { }
@@ -38,7 +38,11 @@ export default class Token {
                 return next();
             });
         } catch (error) {
-            return response.status(401).send("Verification Failed");
+            return response.status(401).send("Authentication Failed!");
         }
+    }
+
+    public static authorization = () => {
+
     }
 }
