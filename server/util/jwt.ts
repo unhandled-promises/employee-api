@@ -8,8 +8,11 @@ import { App } from "../../types/index";
 dotenv.config();
 
 // Nodejs encryption with CTR
-const privateKey = process.env.privateKey || process.env.PRIV_KEY;
-const publicKey = process.env.publicKey || process.env.PUB_KEY;
+const privateKey = process.env.privateKey || JSON.parse(process.env.PRIV_KEY);
+const publicKey = process.env.publicKey || JSON.parse(process.env.PUB_KEY);
+
+console.log(privateKey);
+console.log(publicKey);
 
 // Declare model interface
 interface IEmployeeDoc extends App.Employee, Document { }
@@ -24,6 +27,7 @@ export default class Token {
                 role: employee.role,
             },
             privateKey, { algorithm: "RS256" });
+
         return token;
     }
 
