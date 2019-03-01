@@ -38,6 +38,8 @@ router.route("/verify").post(bodyParser.json(), async (request, response) => {
         const employee = await Employee.findOne({ email, token });
 
         if (employee) {
+            await Employee.update({ _id: employee._id }, { registered: true }, {new: true});
+
             const jwtToken = Token.sign(employee);
             return response.status(200).json(
                 {
