@@ -17,19 +17,28 @@ interface IEmployeeDoc extends App.Employee, Document { }
 export default class Token {
     public static sign = (employee: IEmployeeDoc) => {
         const token = jwt.sign(
-            { _id: employee._id, email: employee.email, role: employee.role, company: employee.company },
+            {
+                _id: employee._id,
+                company: employee.company,
+                email: employee.email,
+                role: employee.role,
+            },
             privateKey, { algorithm: "RS256" });
         return token;
     }
 
     public static authenticate = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-        const token = request.headers.authorization;
+        try {
+            const token = request.headers.authorization;
 
-        jwt.verify(token, publicKey, { algorithms: ["RS256"] }, (err, payload) => {
-            if (err) { console.log(err); }
-            return next();
-        });
-
-        return false;
+            jwt.verify(token, publicKey, { algorithms: ["RS256"] }, (err, payload) => {
+                if (err) {
+                    throw err;
+                }
+                return next();
+            });
+        } catch (error) {
+            return next(error);
+        }
     }
 }
