@@ -19,6 +19,7 @@ export default class Token {
         console.log("Sign");
         console.log(privateKey);
         console.log(publicKey);
+        console.log(employee);
         const token = jwt.sign(
             {
                 _id: employee._id,
@@ -29,6 +30,7 @@ export default class Token {
             privateKey, { algorithm: "RS256" });
 
         console.log(token);
+        console.log("Past Token");
 
         return token;
     }
