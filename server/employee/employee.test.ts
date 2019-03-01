@@ -86,26 +86,6 @@ describe("/api/employee tests", () => {
     });
 
     // Unit Test
-    it("should get all employees", async () => {
-        const response = await request(app)
-            .get("/api/employee/");
-
-        const creds = {
-            password: "lkjlkjk",
-            email: "figginsc@gmail.com"
-        };
-
-        const response2 = await request(app)
-            .post("/api/employee/login")
-            .send(creds);
-
-        console.log(response2);
-
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual([expect.objectContaining({ company: "5c768ea0ca379cfc5b1be974", role: "owner" })]);
-    });
-
-    // Unit Test
     it("should get an employee", async () => {
         const employeeInfo = await Employee.findOne({ last_name: "Figgins" });
 

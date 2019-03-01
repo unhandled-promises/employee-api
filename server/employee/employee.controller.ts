@@ -1,8 +1,8 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
-import Employee from "./employee.model";
 import Encryption from "../util/crypto";
 import Token from "../util/jwt";
+import Employee from "./employee.model";
 
 const router = express.Router();
 
@@ -11,11 +11,17 @@ router.route("/login").post(bodyParser.json(), async (request, response) => {
         const password = Encryption.encrypt(request.body.password);
         const email = request.body.email;
 
-        const employee = await Employee.findOne({ email: email, password: password });
+        const employee = await Employee.findOne({ email, password });
 
         if (employee) {
-            const token = Token.sign(employee);
-            return response.status(200).json(token);
+            const jwtToken = Token.sign(employee);
+            return response.status(200).json(
+                {
+                    message: "Authentication Successful!",
+                    success: true,
+                    token: jwtToken,
+                },
+            );
         } else {
             throw Error;
         }
@@ -24,13 +30,27 @@ router.route("/login").post(bodyParser.json(), async (request, response) => {
     }
 });
 
-router.route("/").get(async (request, response) => {
+router.route("/verify").post(bodyParser.json(), async (request, response) => {
     try {
-        const employees = await Employee.find();
-        return response.status(200).json(employees);
+        const token = request.body.token;
+        const email = request.body.email;
+
+        const employee = await Employee.findOne({ email, token });
+
+        if (employee) {
+            const jwtToken = Token.sign(employee);
+            return response.status(200).json(
+                {
+                    message: "Authentication Successful!",
+                    success: true,
+                    token: jwtToken,
+                },
+            );
+        } else {
+            throw Error;
+        }
     } catch (error) {
-        console.log(error);
-        return response.status(400).send(error);
+        return response.status(401).send("Verification Failed");
     }
 });
 
