@@ -65,7 +65,11 @@ router.route("/verify").post(bodyParser.json(), async (request, response) => {
 router.route("/").post(bodyParser.json(), async (request, response) => {
     try {
         const employee = new Employee(request.body);
-        employee.password = Encryption.encrypt(request.body.password);
+
+        if (request.body.password) {
+            employee.password = Encryption.encrypt(request.body.password);
+        }
+        
         employee.token = Encryption.createVerificationCode();
 
         await employee.save();

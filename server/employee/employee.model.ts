@@ -7,22 +7,26 @@ interface IEmployeeDoc extends App.Employee, Document { }
 
 const employeeSchemaDef: SchemaDef<App.Employee> = {
     company: {
+        required: true,
         type: Schema.Types.ObjectId,
     },
     device: {
         consent: {
-            type: Boolean,
+            default: null,
+            type: Boolean || null,
         },
         manufacturer: {
-            type: String,
+            default: null,
+            type: String || null,
         },
         type: {
-            type: String,
+            default: null,
+            type: String || null,
         },
     },
     dob: {
-        required: true,
-        type: Date,
+        default: null,
+        type: Date || null,
     },
     email: {
         required: true,
@@ -30,27 +34,33 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
         unique: true,
     },
     first_name: {
-        required: true,
-        type: String,
+        default: null,
+        type: String || null,
     },
     last_name: {
-        type: String,
+        default: null,
+        type: String || null,
     },
     password: {
-        type: String,
+        default: null,
+        type: String || null,
     },
     phone: {
-        type: String,
+        default: null,
+        type: String || null,
     },
     preferences: {
         launchpage: {
+            default: "dashboard",
             type: String,
         },
     },
     registered: {
+        default: false,
         type: Boolean,
     },
     role: {
+        default: "employee",
         required: true,
         type: String,
     },
@@ -71,10 +81,12 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
         },
     ],
     sms_consent: {
+        default: false,
         type: Boolean,
     },
     token: {
-        type: String,
+        default: null,
+        type: String || null,
     },
 };
 
