@@ -1,7 +1,6 @@
 import { Schema } from "mongoose";
 
 export declare module App {
-
     export interface Employee {
         company: Schema.Types.ObjectId;
         device: {
@@ -25,6 +24,12 @@ export declare module App {
         token: string;
     }
 
+    export interface Mail {
+        to: string;
+        from: string;
+        subject: string;
+        html: string;
+    }
 }
 
 export default App;

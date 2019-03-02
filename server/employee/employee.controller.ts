@@ -1,6 +1,7 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import Token from "../util/auth";
+import Comm from "../util/comm";
 import Encryption from "../util/crypto";
 import Employee from "./employee.model";
 
@@ -65,8 +66,18 @@ router.route("/").post(bodyParser.json(), async (request, response) => {
     try {
         const employee = new Employee(request.body);
         employee.password = Encryption.encrypt(request.body.password);
+        employee.token = Encryption.createVerificationCode();
 
         await employee.save();
+        const emailContent = {
+            from: "test@special.com",
+            html: `Welcome! Your token is: ${employee.token}`,
+            subject: "Welcome!",
+            to: employee.email,
+        };
+
+        Comm.sendEmail(emailContent);
+
         return response.status(201).json("Employee created!");
     } catch (error) {
         return response.status(400).json("Employee not created");

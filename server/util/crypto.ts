@@ -13,6 +13,7 @@ export default class Encryption {
         const cipher = crypto.createCipher(algorithm, secret);
         let crypted = cipher.update(value, "utf8", "hex");
         crypted += cipher.final("hex");
+
         return crypted;
     }
 
@@ -20,6 +21,19 @@ export default class Encryption {
         const decipher = crypto.createDecipher(algorithm, secret);
         let decrypted = decipher.update(value, "hex", "utf8");
         decrypted += decipher.final("utf8");
+
         return decrypted;
+    }
+
+    public static createVerificationCode = () => {
+        const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZ";
+        const stringLength = 8;
+        let verificationCode = "";
+        for (let i = 0; i < stringLength; i++) {
+            const rnum = Math.floor(Math.random() * chars.length);
+            verificationCode += chars.substring(rnum, rnum + 1);
+        }
+
+        return verificationCode;
     }
 }
