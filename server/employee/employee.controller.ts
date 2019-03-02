@@ -38,6 +38,8 @@ router.route("/login").post(bodyParser.json(), async (request, response) => {
 
 router.route("/verify").post(bodyParser.json(), async (request, response) => {
     try {
+        console.log(request);
+
         const token = request.body.token;
         const email = request.body.email;
 
@@ -69,7 +71,7 @@ router.route("/").post(bodyParser.json(), async (request, response) => {
         if (request.body.password) {
             employee.password = Encryption.encrypt(request.body.password);
         }
-        
+
         employee.token = Encryption.createVerificationCode();
 
         await employee.save();
