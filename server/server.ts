@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 import app from "./app";
 
 const url = process.env.MONGODB_URI || "mongodb://localhost:27017/employees";
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 9001;
 
 (async () => {
   // Connect to the database
