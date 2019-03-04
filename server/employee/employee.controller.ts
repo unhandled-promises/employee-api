@@ -38,8 +38,6 @@ router.route("/login").post(bodyParser.json(), async (request, response) => {
 
 router.route("/verify").post(bodyParser.json(), async (request, response) => {
     try {
-        console.log(request);
-
         const token = request.body.token;
         const email = request.body.email;
 
@@ -137,6 +135,11 @@ router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, 
         if (Token.authorize("id", request)) {
             const employeeId = request.params.id;
             const employeeUpdate = request.body;
+
+            if (employeeUpdate.password) {
+                employeeUpdate.password = Encryption.encrypt(employeeUpdate.password);
+            }
+
             await Employee.update({ _id: employeeId }, employeeUpdate, { new: true });
             return response.status(202).json("Employee updated!");
         } else {

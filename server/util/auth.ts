@@ -75,6 +75,7 @@ export default class Token {
 
             jwt.verify(token, Token.publicKey, { algorithms: ["RS256"] }, (err, payload) => {
                 if (err) {
+                    console.log(err);
                     throw err;
                 }
 
