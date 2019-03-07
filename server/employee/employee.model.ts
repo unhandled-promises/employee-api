@@ -14,13 +14,25 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
         required: true,
         type: Schema.Types.ObjectId,
     },
-    device: [
+    devices: [
         {
+            battery: {
+                default: null,
+                type: String || null,
+            },
             id: {
                 default: null,
                 type: String || null,
             },
+            last_sync_time: {
+                default: null,
+                type: Date || null,
+            },
             type: {
+                default: null,
+                type: String || null,
+            },
+            version: {
                 default: null,
                 type: String || null,
             },
@@ -97,7 +109,7 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
     user_id: {
         default: null,
         type: String || null,
-    }
+    },
 };
 
 // Define model schema

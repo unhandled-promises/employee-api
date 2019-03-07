@@ -5,10 +5,7 @@ export declare module App {
     export interface Employee {
         access_token: string | null;
         company: Schema.Types.ObjectId;
-        device: {
-            id: String | null;
-            type: String | null;
-        }
+        devices: Array<Device>;
         dob: Date | null;
         email: string;
         first_name: String | null;
@@ -32,6 +29,14 @@ export declare module App {
         from: string;
         subject: string;
         html: string;
+    }
+
+    export interface Device {
+        battery: String | null;
+        id: String | null;
+        last_sync_time: Date | null;
+        type: String | null;
+        version: String | null;
     }
 }
 
