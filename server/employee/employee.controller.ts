@@ -31,7 +31,6 @@ router.route("/login").post(bodyParser.json(), async (request, response) => {
             throw Error("Login Failed");
         }
     } catch (error) {
-        console.log(error);
         return response.status(401).json(error.toString());
     }
 });
@@ -70,6 +69,14 @@ router.route("/").post(bodyParser.json(), async (request, response) => {
             employee.password = Encryption.encrypt(request.body.password);
         }
 
+        if (request.body.access_token) {
+            employee.access_token = Encryption.encrypt(request.body.access_token);
+        }
+
+        if (request.body.refresh_token) {
+            employee.refresh_token = Encryption.encrypt(request.body.refresh_token);
+        }     
+
         employee.token = Encryption.createVerificationCode();
 
         await employee.save();
@@ -92,8 +99,21 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
     try {
         if (Token.authorize("id", request)) {
             const employeeId = request.params.id;
-            const employees = await Employee.find({ _id: employeeId });
-            return response.status(200).json(employees);
+            const employee = await Employee.findById(employeeId);
+
+            if (employee.password) {
+                employee.password = null;
+            }
+    
+            if (employee.access_token) {
+                employee.access_token = Encryption.decrypt(employee.access_token);
+            }
+    
+            if (employee.refresh_token) {
+                employee.refresh_token = Encryption.decrypt(employee.refresh_token);
+            }   
+
+            return response.status(200).json(employee);
         } else {
             throw Error("No Access");
         }
@@ -107,6 +127,21 @@ router.route("/bycustomer/:id").get(Token.authenticate, async (request, response
         if (Token.authorize("customer", request)) {
             const customerId = request.params.id;
             const employees = await Employee.find({ company: customerId });
+
+            employees.map(employee => {
+                if (employee.password) {
+                    employee.password = null;
+                }
+        
+                if (employee.access_token) {
+                    employee.access_token = Encryption.decrypt(employee.access_token);
+                }
+        
+                if (employee.refresh_token) {
+                    employee.refresh_token = Encryption.decrypt(employee.refresh_token);
+                }                   
+            });
+            
             return response.status(200).json(employees);
         } else {
             throw Error("No Access");
@@ -139,6 +174,14 @@ router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, 
             if (employeeUpdate.password) {
                 employeeUpdate.password = Encryption.encrypt(employeeUpdate.password);
             }
+
+            if (employeeUpdate.access_token) {
+                employeeUpdate.access_token = Encryption.encrypt(employeeUpdate.access_token);
+            }
+
+            if (employeeUpdate.refresh_token) {
+                employeeUpdate.refresh_token = Encryption.encrypt(employeeUpdate.refresh_token);
+            }            
 
             await Employee.update({ _id: employeeId }, employeeUpdate, { new: true });
             return response.status(202).json("Employee updated!");

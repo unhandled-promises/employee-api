@@ -6,24 +6,26 @@ import { App } from "../../types/index";
 interface IEmployeeDoc extends App.Employee, Document { }
 
 const employeeSchemaDef: SchemaDef<App.Employee> = {
+    access_token: {
+        default: null,
+        type: String || null,
+    },
     company: {
         required: true,
         type: Schema.Types.ObjectId,
     },
-    device: {
-        consent: {
-            default: null,
-            type: Boolean || null,
+    device: [
+        {
+            id: {
+                default: null,
+                type: String || null,
+            },
+            type: {
+                default: null,
+                type: String || null,
+            },
         },
-        manufacturer: {
-            default: null,
-            type: String || null,
-        },
-        type: {
-            default: null,
-            type: String || null,
-        },
-    },
+    ],
     dob: {
         default: null,
         type: Date || null,
@@ -54,6 +56,10 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
             default: "dashboard",
             type: String,
         },
+    },
+    refresh_token: {
+        default: null,
+        type: String || null,
     },
     registered: {
         default: false,
@@ -88,6 +94,10 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
         default: null,
         type: String || null,
     },
+    user_id: {
+        default: null,
+        type: String || null,
+    }
 };
 
 // Define model schema
