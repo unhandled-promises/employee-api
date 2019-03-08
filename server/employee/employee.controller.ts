@@ -99,6 +99,26 @@ router.route("/").post(bodyParser.json(), async (request, response) => {
 });
 
 // Resource: Employee
+router.route("/init").post(bodyParser.json(), async (request, response) => {
+    try {
+        const employee = new Employee(request.body);
+        employee.role = "owner";
+        employee.token = Encryption.createVerificationCode();
+        const employees = await Employee.find({ company: employee.company });
+
+        if (employees.length === 0) {
+            await employee.save()
+        } else {
+            throw Error("Employee already created")
+        }
+
+        return response.location(`localhost:3000/verify?t=${employee.token}&e=${employee.email}`).status(201).json("Initial employee created!");
+    } catch (error) {
+        return response.status(400).json(error.toString());
+    }
+});
+
+// Resource: Employee
 router.route("/:id").get(Token.authenticate, async (request, response, next) => {
     try {
         if (Token.authorize("id", request)) {
