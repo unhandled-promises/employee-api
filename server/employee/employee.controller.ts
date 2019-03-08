@@ -100,6 +100,7 @@ router.route("/").post(bodyParser.json(), async (request, response) => {
 
 // Resource: Employee
 router.route("/init").post(bodyParser.json(), async (request, response) => {
+    console.log(request.body);
     try {
         const employee = new Employee(request.body);
         employee.role = "owner";
@@ -112,7 +113,7 @@ router.route("/init").post(bodyParser.json(), async (request, response) => {
             throw Error("Employee already created")
         }
 
-        return response.location(`localhost:3000/verify?t=${employee.token}&e=${employee.email}`).status(201).json("Initial employee created!");
+        return response.status(302).json(`http://localhost:3000/verify?t=${employee.token}&e=${employee.email}`);
     } catch (error) {
         return response.status(400).json(error.toString());
     }
