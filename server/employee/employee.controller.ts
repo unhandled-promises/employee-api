@@ -103,11 +103,12 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
     try {
         if (Token.authorize("id", request)) {
             const employeeId = request.params.id;
-            const employee = await Employee.findById(employeeId);
+            let employee = await Employee.findById(employeeId);
 
-            if (employee.password) {
-                employee.password = null;
-            }
+            employee = employee.toObject();
+
+            delete employee.password;
+            delete employee.token;
 
             if (employee.access_token) {
                 employee.access_token = Encryption.decrypt(employee.access_token);
@@ -134,9 +135,8 @@ router.route("/bycustomer/:id").get(Token.authenticate, async (request, response
             const employees = await Employee.find({ company: customerId });
 
             employees.map((employee) => {
-                if (employee.password) {
-                    employee.password = null;
-                }
+                employee.password = null;
+                employee.token = null;
 
                 if (employee.access_token) {
                     employee.access_token = Encryption.decrypt(employee.access_token);
