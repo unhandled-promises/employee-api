@@ -88,11 +88,11 @@ export default class Token {
         }
     }
 
-    public static async authorize(authCheck: Array<string>, request: express.Request) {
+    public static async authorize(authCheck: string[], request: express.Request) {
         let validityCheck = false;
 
         while (validityCheck === false && authCheck.length !== 0) {
-            let role: string = authCheck[0];
+            const role: string = authCheck[0];
             authCheck.shift();
 
             switch (role) {

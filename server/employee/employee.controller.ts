@@ -1,11 +1,11 @@
+import axios from "axios";
 import * as bodyParser from "body-parser";
 import * as express from "express";
-import axios from "axios";
+import { CUSTOMERS_API, USER_INTERFACE } from "../api-config";
 import Token from "../util/auth";
 import Comm from "../util/comm";
 import Encryption from "../util/crypto";
 import Employee from "./employee.model";
-import { CUSTOMERS_API, USER_INTERFACE } from "../api-config";
 
 const router = express.Router();
 
@@ -116,9 +116,9 @@ router.route("/init").post(bodyParser.json(), async (request, response) => {
         const employees = await Employee.find({ company: employee.company });
 
         if (employees.length === 0 && company.status === 200) {
-            await employee.save()
+            await employee.save();
         } else {
-            throw Error("Employee already created")
+            throw Error("Employee already created");
         }
 
         return response.status(302).json(`${USER_INTERFACE}verify?t=${employee.token}&e=${employee.email}`);
