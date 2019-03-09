@@ -116,7 +116,7 @@ export default class Token {
                     }
                     break;
                 case "owner":
-                    if (request.token.owner === "owner" && request.token.company === request.params.id) {
+                    if (request.token.role === "owner" && request.token.company === request.params.id) {
                         validityCheck = true;
                     }
                 default:
