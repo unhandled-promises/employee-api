@@ -1,9 +1,11 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
+import axios from "axios";
 import Token from "../util/auth";
 import Comm from "../util/comm";
 import Encryption from "../util/crypto";
 import Employee from "./employee.model";
+import { CUSTOMERS_API, USER_INTERFACE } from "../api-config";
 
 const router = express.Router();
 
@@ -64,35 +66,37 @@ router.route("/verify").post(bodyParser.json(), async (request, response) => {
 });
 
 // Resource: Employee
-router.route("/").post(bodyParser.json(), async (request, response) => {
+router.route("/").post(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        const employee = new Employee(request.body);
+        if (Token.authorize(["supervisor"], request)) {
+            const employee = new Employee(request.body);
 
-        if (request.body.password) {
-            employee.password = Encryption.encrypt(request.body.password);
+            if (request.body.password) {
+                employee.password = Encryption.encrypt(request.body.password);
+            }
+
+            if (request.body.access_token) {
+                employee.access_token = Encryption.encrypt(request.body.access_token);
+            }
+
+            if (request.body.refresh_token) {
+                employee.refresh_token = Encryption.encrypt(request.body.refresh_token);
+            }
+
+            employee.token = Encryption.createVerificationCode();
+
+            await employee.save();
+            const emailContent = {
+                from: "test@special.com",
+                html: `Welcome! Your token is: ${employee.token}`,
+                subject: "Welcome!",
+                to: employee.email,
+            };
+
+            Comm.sendEmail(emailContent);
+
+            return response.status(201).json("Employee created!");
         }
-
-        if (request.body.access_token) {
-            employee.access_token = Encryption.encrypt(request.body.access_token);
-        }
-
-        if (request.body.refresh_token) {
-            employee.refresh_token = Encryption.encrypt(request.body.refresh_token);
-        }
-
-        employee.token = Encryption.createVerificationCode();
-
-        await employee.save();
-        const emailContent = {
-            from: "test@special.com",
-            html: `Welcome! Your token is: ${employee.token}`,
-            subject: "Welcome!",
-            to: employee.email,
-        };
-
-        Comm.sendEmail(emailContent);
-
-        return response.status(201).json("Employee created!");
     } catch (error) {
         return response.status(400).json("Employee not created");
     }
@@ -100,20 +104,24 @@ router.route("/").post(bodyParser.json(), async (request, response) => {
 
 // Resource: Employee
 router.route("/init").post(bodyParser.json(), async (request, response) => {
-    console.log(request.body);
     try {
         const employee = new Employee(request.body);
         employee.role = "owner";
         employee.token = Encryption.createVerificationCode();
+
+        // Verify company
+        const company = await axios.get(`${CUSTOMERS_API}api/customers/${employee.company}/exist`);
+
+        // Verify no employees
         const employees = await Employee.find({ company: employee.company });
 
-        if (employees.length === 0) {
+        if (employees.length === 0 && company.status === 200) {
             await employee.save()
         } else {
             throw Error("Employee already created")
         }
 
-        return response.status(302).json(`http://localhost:3000/verify?t=${employee.token}&e=${employee.email}`);
+        return response.status(302).json(`${USER_INTERFACE}verify?t=${employee.token}&e=${employee.email}`);
     } catch (error) {
         return response.status(400).json(error.toString());
     }
@@ -122,7 +130,7 @@ router.route("/init").post(bodyParser.json(), async (request, response) => {
 // Resource: Employee
 router.route("/:id").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (Token.authorize("id", request)) {
+        if (Token.authorize(["id", "supervisor"], request)) {
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
 
@@ -151,7 +159,7 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
 // Resource: Employee
 router.route("/bycustomer/:id").get(Token.authenticate, async (request, response) => {
     try {
-        if (Token.authorize("customer", request)) {
+        if (Token.authorize(["customer"], request)) {
             const customerId = request.params.id;
             const employees = await Employee.find({ company: customerId });
 
@@ -180,7 +188,7 @@ router.route("/bycustomer/:id").get(Token.authenticate, async (request, response
 // Resource: Employee
 router.route("/:id").delete(Token.authenticate, async (request, response) => {
     try {
-        if (Token.authorize("id", request)) {
+        if (Token.authorize(["id", "supervisor"], request)) {
             const employeeId = request.params.id;
             await Employee.findOneAndRemove({ _id: employeeId });
             return response.status(202).json("Employee deleted!");
@@ -195,7 +203,7 @@ router.route("/:id").delete(Token.authenticate, async (request, response) => {
 // Resource: Employee
 router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (Token.authorize("id", request)) {
+        if (Token.authorize(["id", "supervisor"], request)) {
             const employeeId = request.params.id;
             const employeeUpdate = request.body;
 
@@ -224,7 +232,7 @@ router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, 
 // Resource: Employee => Device
 router.route("/:id/device/").post(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (Token.authorize("id", request)) {
+        if (Token.authorize(["id"], request)) {
             const employeeId = request.params.id;
             const deviceObj = request.body;
 
@@ -245,7 +253,7 @@ router.route("/:id/device/").post(Token.authenticate, bodyParser.json(), async (
 // Resource: Employee => Device
 router.route("/:id/device/:device_id").put(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (Token.authorize("id", request)) {
+        if (Token.authorize(["id"], request)) {
             const employeeId = request.params.id;
             const deviceId = request.params.device_id;
             const deviceUpdate = request.body;
@@ -276,7 +284,7 @@ router.route("/:id/device/:device_id").put(Token.authenticate, bodyParser.json()
 // Resource: Employee => Device
 router.route("/:id/device/:device_id").delete(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (Token.authorize("id", request)) {
+        if (Token.authorize(["id"], request)) {
             const employeeId = request.params.id;
             const deviceId = request.params.device_id;
 

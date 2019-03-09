@@ -4,6 +4,7 @@ import * as express from "express";
 import * as jwt from "jsonwebtoken";
 import { Document } from "mongoose";
 import { App } from "../../types/index";
+import Employee from "../employee/employee.model";
 
 // Put dotenv in use before importing controllers
 dotenv.config();
@@ -87,26 +88,48 @@ export default class Token {
         }
     }
 
-    public static authorize = (authCheck: string, request: express.Request) => {
+    public static async authorize(authCheck: Array<string>, request: express.Request) {
         let validityCheck = false;
 
-        switch (authCheck) {
-            case "id":
-                if (request.token.id === request.params.id) {
-                    validityCheck = true;
-                }
-                break;
-            case "customer":
-                if (request.token.company === request.params.id && (request.token.role === "owner" || request.token.role === "manager")) {
-                    validityCheck = true;
-                }
-                break;
-            default:
-                break;
+        while (validityCheck === false && authCheck.length !== 0) {
+            let role: string = authCheck[0];
+            authCheck.shift();
+
+            switch (role) {
+                case "employee":
+                    if (request.token.id === request.params.id) {
+                        validityCheck = true;
+                    }
+                    break;
+                case "supervisor":
+                    if (request.token.role === "owner" || request.token.role === "manager") {
+                        const employee: IEmployeeDoc = await Employee.findOne({ _id: request.params.id });
+
+                        if (employee.company === request.token.company) {
+                            validityCheck = true;
+                        }
+                    }
+                    break;
+                case "customer":
+                    if (request.token.company === request.params.id && (request.token.role === "owner" || request.token.role === "manager")) {
+                        validityCheck = true;
+                    }
+                    break;
+                case "owner":
+                    if (request.token.owner === "owner" && request.token.company === request.params.id) {
+                        validityCheck = true;
+                    }
+                default:
+                    break;
+            }
         }
 
         return validityCheck;
     }
+
+    // private static roleCall = (role: string) => {
+
+    // }
 
     private static privateKey: jwt.Secret;
     private static publicKey: jwt.GetPublicKeyOrSecret | string;

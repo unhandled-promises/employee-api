@@ -62,6 +62,7 @@
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
     "aws-sdk": "^2.412.0",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
