@@ -157,13 +157,13 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
     }
 });
 
-router.route("/:id/heart").get(Token.authenticate, async (request, response, next) => {
+router.route("/:id/activities/heart").get(Token.authenticate, async (request, response, next) => {
     try {
         if (Token.authorize(["id", "employee"], request)) {
             
             const employeeId = request.params.id;
 
-            const activities = await callFitbit(employeeId, `activities-heart/date/today/1d.json`);
+            const activities = await callFitbit(employeeId, `activities/heart/date/today/1d.json`);
 
             return response.status(200).json(activities);
         }
@@ -183,8 +183,6 @@ router.route("/:id/activities").get(Token.authenticate, async (request, response
             const employeeId = request.params.id;
 
             const today = moment().format("YYYY-MM-DD");
-
-            console.log("today", today);
 
             const activities = await callFitbit(employeeId, `activities/date/${today}.json`);
 
