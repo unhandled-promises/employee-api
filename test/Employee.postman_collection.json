@@ -415,7 +415,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://employee-api-p3.herokuapp.com/api/employee/5c85844ad757c80021b1b6af/heart",
+							"raw": "https://employee-api-p3.herokuapp.com/api/employee/5c85844ad757c80021b1b6af/activities/heart",
 							"protocol": "https",
 							"host": [
 								"employee-api-p3",
