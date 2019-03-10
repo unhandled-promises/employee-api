@@ -157,7 +157,7 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
     }
 });
 
-router.route("/:id/activities-heart").get(Token.authenticate, async (request, response, next) => {
+router.route("/:id/heart").get(Token.authenticate, async (request, response, next) => {
     try {
         if (Token.authorize(["id", "employee"], request)) {
             
