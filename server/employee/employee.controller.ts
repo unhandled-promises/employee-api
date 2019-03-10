@@ -7,6 +7,7 @@ import Comm from "../util/comm";
 import Encryption from "../util/crypto";
 import Employee from "./employee.model";
 
+const moment = require('moment');
 const router = express.Router();
 
 // Resource: Employee
@@ -152,6 +153,48 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
             throw Error("No Access");
         }
     } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/activities-heart").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (Token.authorize(["id", "employee"], request)) {
+            
+            const employeeId = request.params.id;
+
+            const activities = await callFitbit(employeeId, `activities-heart/date/today/1d.json`);
+
+            return response.status(200).json(activities);
+        }
+        else {
+            throw Error("No Access");
+        }
+    }
+    catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/activities").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (Token.authorize(["id", "employee"], request)) {
+            
+            const employeeId = request.params.id;
+
+            const today = moment().format("YYYY-MM-DD");
+
+            console.log("today", today);
+
+            const activities = await callFitbit(employeeId, `activities/date/${today}.json`);
+
+            return response.status(200).json(activities);
+        }
+        else {
+            throw Error("No Access");
+        }
+    }
+    catch (error) {
         return response.status(404).json(error.toString());
     }
 });
@@ -306,5 +349,28 @@ router.route("/:id/device/:device_id").delete(Token.authenticate, bodyParser.jso
         return response.status(404).json(error.toString());
     }
 });
+
+let callFitbit = async (employeeId: String, endpoint: String) => {
+
+    let employee = await Employee.findById(employeeId);
+
+    employee = employee.toObject();
+
+    if (employee.access_token) {
+        employee.access_token = Encryption.decrypt(employee.access_token);
+    }
+
+    const authStr = `Bearer ${employee.access_token}`;
+
+    const config = {
+        headers: {
+            "Authorization": authStr
+        }
+    }
+
+    const activities = await axios.get(`https://api.fitbit.com/1/user/${employee.user_id}/${endpoint}`, config);
+
+    return activities.data;
+}
 
 export default router;
