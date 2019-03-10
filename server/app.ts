@@ -7,6 +7,7 @@ dotenv.config();
 
 // Import controllers
 import employeeController from "./employee/employee.controller";
+import authController from "./auth/auth.controller";
 
 // Create the express application
 const app = express();
@@ -29,6 +30,7 @@ app.use(allowCrossDomain);
 
 // Assign controllers to routes
 app.use("/api/employee", employeeController);
+app.use("/auth", authController);
 
 // Init Token
 Token.init();

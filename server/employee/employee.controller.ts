@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as bodyParser from "body-parser";
 import * as express from "express";
-import { CUSTOMERS_API, USER_INTERFACE } from "../api-config";
+import { CUSTOMERS_API, USER_INTERFACE } from "../config/api-config";
 import Token from "../util/auth";
 import Comm from "../util/comm";
 import Encryption from "../util/crypto";
