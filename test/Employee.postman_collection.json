@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "22368e5e-7339-46a2-bfb8-63d39873e9f0",
+		"_postman_id": "a2ba9b1b-5954-4348-8326-f5ace379ffa0",
 		"name": "Project3",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -386,6 +386,88 @@
 								"api",
 								"employee",
 								"5c76afe15b0f2700210d5a71"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Employee Heart Activities",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55IjoiNWM4NTg0NDkwN2RkZWIwMDIxYTI3ZDNkIiwiZW1haWwiOiJhQGEuY29tIiwiaWQiOiI1Yzg1ODQ0YWQ3NTdjODAwMjFiMWI2YWYiLCJyb2xlIjoib3duZXIiLCJpYXQiOjE1NTIyNTQwMjZ9.FpZJAPk3QNZmdIgJNhIwW-gOlZoPBU5A_bkuAV38HngZSC6kYkwN8ln8YNBAedzW2ggYUxPwqMeQhzVjOjhPsZvagCSrJ3wOFSmXjJJYWP6Y-Qya1OWOEC5nuggffCJh0XSSxr_Nrm0dSNneuse0u7r67CICDeXbAwOl-xZ7ydd0zJGEIj-kNU8wgmA0c-9LJDkge356szxuo4zTD72GBL8lkIlx3T2UJDvpfGK2pFPA1zs_JgzFxnNXpD_J9Ih6dolnsipiz31ZrOmUM6qd3yMLJXn9umG9sZZ47ISMgIE7QqJV1bfItgje_mIx_X4zo_hOhlODlQPKIn_0Elf2nfh6WROxBFL_vFfat8bNCZo41Y-3k4p7YFHIt_Wjkpzy9i_0R1bXVQwKdVfEtIl0n5nAMAQkNILq9EGZr6fvczxnS0X1NFuW8WEyt_eJLZ4fIwmr5OVApERixlRsrWoNeUWUUWoKfz80CJEKECvZsGvrX1vhOWjAS4ld0U7TI59dfDJHYOnf4IpY46y9r-xeIFNelWJTQIaBXwRTSbYWwupRsr7Fc-ch7BloNm-k8o0B8sBhdO63HuqDzt2uq6wh3pEXP8N2xsboNy90AF7FOU7EUqBu9ZJnlJCPfdVHO6fIHAk_-pKGDo4KkK06Ew-PrHjxyN6qWN3T_KgS7C0BBb0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://employee-api-p3.herokuapp.com/api/employee/5c85844ad757c80021b1b6af/heart",
+							"protocol": "https",
+							"host": [
+								"employee-api-p3",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"employee",
+								"5c85844ad757c80021b1b6af",
+								"heart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Employee Activities",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55IjoiNWM4NTg0NDkwN2RkZWIwMDIxYTI3ZDNkIiwiZW1haWwiOiJhQGEuY29tIiwiaWQiOiI1Yzg1ODQ0YWQ3NTdjODAwMjFiMWI2YWYiLCJyb2xlIjoib3duZXIiLCJpYXQiOjE1NTIyNTQwMjZ9.FpZJAPk3QNZmdIgJNhIwW-gOlZoPBU5A_bkuAV38HngZSC6kYkwN8ln8YNBAedzW2ggYUxPwqMeQhzVjOjhPsZvagCSrJ3wOFSmXjJJYWP6Y-Qya1OWOEC5nuggffCJh0XSSxr_Nrm0dSNneuse0u7r67CICDeXbAwOl-xZ7ydd0zJGEIj-kNU8wgmA0c-9LJDkge356szxuo4zTD72GBL8lkIlx3T2UJDvpfGK2pFPA1zs_JgzFxnNXpD_J9Ih6dolnsipiz31ZrOmUM6qd3yMLJXn9umG9sZZ47ISMgIE7QqJV1bfItgje_mIx_X4zo_hOhlODlQPKIn_0Elf2nfh6WROxBFL_vFfat8bNCZo41Y-3k4p7YFHIt_Wjkpzy9i_0R1bXVQwKdVfEtIl0n5nAMAQkNILq9EGZr6fvczxnS0X1NFuW8WEyt_eJLZ4fIwmr5OVApERixlRsrWoNeUWUUWoKfz80CJEKECvZsGvrX1vhOWjAS4ld0U7TI59dfDJHYOnf4IpY46y9r-xeIFNelWJTQIaBXwRTSbYWwupRsr7Fc-ch7BloNm-k8o0B8sBhdO63HuqDzt2uq6wh3pEXP8N2xsboNy90AF7FOU7EUqBu9ZJnlJCPfdVHO6fIHAk_-pKGDo4KkK06Ew-PrHjxyN6qWN3T_KgS7C0BBb0"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://employee-api-p3.herokuapp.com/api/employee/5c85844ad757c80021b1b6af/activities",
+							"protocol": "https",
+							"host": [
+								"employee-api-p3",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"employee",
+								"5c85844ad757c80021b1b6af",
+								"activities"
 							]
 						}
 					},
