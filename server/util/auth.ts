@@ -88,7 +88,7 @@ export default class Token {
         }
     }
 
-    public static async authorize(authCheck: string[], request: express.Request) {
+    public static async authorize(authCheck: string[], request: express.Request, useQueryParam: boolean) {
         let validityCheck = false;
 
         while (validityCheck === false && authCheck.length !== 0) {
@@ -111,7 +111,8 @@ export default class Token {
                     }
                     break;
                 case "customer":
-                    if (request.token.company === request.params.id && (request.token.role === "owner" || request.token.role === "manager")) {
+                    const companyId = useQueryParam ? request.query.companyId : request.params.id;
+                    if (request.token.company === companyId && (request.token.role === "owner" || request.token.role === "manager")) {
                         validityCheck = true;
                     }
                     break;
