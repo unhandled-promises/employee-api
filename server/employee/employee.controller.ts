@@ -135,7 +135,7 @@ router.route("/init").post(bodyParser.json(), async (request, response) => {
 // Resource: Employee
 router.route("/:id").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["id", "supervisor"], request, false)) {
+        if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
 
@@ -163,7 +163,7 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
 
 router.route("/:id/activities/heart").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["id", "employee"], request, false)) {
+        if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
             employee = employee.toObject();
@@ -179,7 +179,7 @@ router.route("/:id/activities/heart").get(Token.authenticate, async (request, re
 
 router.route("/:id/activities").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["id", "employee"], request, false)) {
+        if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
             employee = employee.toObject();
@@ -226,7 +226,7 @@ router.route("/bycustomer/:id").get(Token.authenticate, async (request, response
 // Resource: Employee
 router.route("/:id").delete(Token.authenticate, async (request, response) => {
     try {
-        if (await Token.authorize(["id", "supervisor"], request, false)) {
+        if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             await Employee.findOneAndRemove({ _id: employeeId });
             return response.status(202).json("Employee deleted!");
@@ -241,7 +241,7 @@ router.route("/:id").delete(Token.authenticate, async (request, response) => {
 // Resource: Employee
 router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["id", "supervisor"], request, false)) {
+        if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             const employeeUpdate = request.body;
 
@@ -270,7 +270,7 @@ router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, 
 // Resource: Employee => Device
 router.route("/:id/device/").post(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["id"], request, false)) {
+        if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
             const deviceObj = request.body;
 
@@ -291,7 +291,7 @@ router.route("/:id/device/").post(Token.authenticate, bodyParser.json(), async (
 // Resource: Employee => Device
 router.route("/:id/device/:device_id").put(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["id"], request, false)) {
+        if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
             const deviceId = request.params.device_id;
             const deviceUpdate = request.body;
@@ -322,7 +322,7 @@ router.route("/:id/device/:device_id").put(Token.authenticate, bodyParser.json()
 // Resource: Employee => Device
 router.route("/:id/device/:device_id").delete(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["id"], request, false)) {
+        if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
             const deviceId = request.params.device_id;
 

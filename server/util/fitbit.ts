@@ -1,7 +1,7 @@
 import axios from "axios";
+import { Document } from "mongoose";
 import { App } from "../../types/index";
 import Encryption from "../util/crypto";
-import { Document } from "mongoose";
 
 // Declare model interface
 interface IEmployeeDoc extends App.Employee, Document { }

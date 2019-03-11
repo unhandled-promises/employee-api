@@ -10,7 +10,7 @@ router.route("/").get(Token.authenticate, async (request, response) => {
         if (await Token.authorize(["customer"], request, true)) {
             const customerId = request.query.companyId;
             const employees = await Employee.find({ company: customerId });
-            let promises: any[] = [];
+            const promises: any[] = [];
 
             employees.map((employee) => {
                 const today = moment().format("YYYY-MM-DD");
