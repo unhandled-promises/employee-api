@@ -127,10 +127,6 @@ export default class Token {
         return validityCheck;
     }
 
-    // private static roleCall = (role: string) => {
-
-    // }
-
     private static privateKey: jwt.Secret;
     private static publicKey: jwt.GetPublicKeyOrSecret | string;
 }

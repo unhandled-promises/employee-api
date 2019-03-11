@@ -6,8 +6,8 @@ import Token from "./util/auth";
 dotenv.config();
 
 // Import controllers
-import employeeController from "./employee/employee.controller";
 import authController from "./auth/auth.controller";
+import employeeController from "./employee/employee.controller";
 
 // Create the express application
 const app = express();
