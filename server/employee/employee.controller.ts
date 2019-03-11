@@ -2,11 +2,15 @@ import axios from "axios";
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import * as moment from "moment";
+
 import { CUSTOMERS_API, USER_INTERFACE } from "../config/api-config";
+
+import Employee from "./employee.model";
+
 import Token from "../util/auth";
 import Comm from "../util/comm";
 import Encryption from "../util/crypto";
-import Employee from "./employee.model";
+import Fitbit from "../util/fitbit";
 
 const router = express.Router();
 
@@ -69,7 +73,7 @@ router.route("/verify").post(bodyParser.json(), async (request, response) => {
 // Resource: Employee
 router.route("/").post(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["supervisor"], request)) {
+        if (await Token.authorize(["supervisor"], request, false)) {
             const employee = new Employee(request.body);
 
             if (request.body.password) {
@@ -131,7 +135,7 @@ router.route("/init").post(bodyParser.json(), async (request, response) => {
 // Resource: Employee
 router.route("/:id").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["employee", "supervisor"], request)) {
+        if (await Token.authorize(["id", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
 
@@ -159,12 +163,11 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
 
 router.route("/:id/activities/heart").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["employee"], request)) {
-
+        if (await Token.authorize(["id", "employee"], request, false)) {
             const employeeId = request.params.id;
-
-            const activities = await callFitbit(employeeId, `activities/heart/date/today/1d.json`);
-
+            let employee = await Employee.findById(employeeId);
+            employee = employee.toObject();
+            const activities = await Fitbit.callFitbit(employee, `activities/heart/date/today/1d.json`);
             return response.status(200).json(activities);
         } else {
             throw Error("No Access");
@@ -176,14 +179,12 @@ router.route("/:id/activities/heart").get(Token.authenticate, async (request, re
 
 router.route("/:id/activities").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["employee"], request)) {
-
+        if (await Token.authorize(["id", "employee"], request, false)) {
             const employeeId = request.params.id;
-
+            let employee = await Employee.findById(employeeId);
+            employee = employee.toObject();
             const today = moment().format("YYYY-MM-DD");
-
-            const activities = await callFitbit(employeeId, `activities/date/${today}.json`);
-
+            const activities = await Fitbit.callFitbit(employee, `activities/date/${today}.json`);
             return response.status(200).json(activities);
         } else {
             throw Error("No Access");
@@ -196,7 +197,7 @@ router.route("/:id/activities").get(Token.authenticate, async (request, response
 // Resource: Employee
 router.route("/bycustomer/:id").get(Token.authenticate, async (request, response) => {
     try {
-        if (await Token.authorize(["customer"], request)) {
+        if (await Token.authorize(["customer"], request, false)) {
             const customerId = request.params.id;
             const employees = await Employee.find({ company: customerId });
 
@@ -225,7 +226,7 @@ router.route("/bycustomer/:id").get(Token.authenticate, async (request, response
 // Resource: Employee
 router.route("/:id").delete(Token.authenticate, async (request, response) => {
     try {
-        if (await Token.authorize(["employee", "supervisor"], request)) {
+        if (await Token.authorize(["id", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             await Employee.findOneAndRemove({ _id: employeeId });
             return response.status(202).json("Employee deleted!");
@@ -240,7 +241,7 @@ router.route("/:id").delete(Token.authenticate, async (request, response) => {
 // Resource: Employee
 router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["employee", "supervisor"], request)) {
+        if (await Token.authorize(["id", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             const employeeUpdate = request.body;
 
@@ -269,7 +270,7 @@ router.route("/:id").put(Token.authenticate, bodyParser.json(), async (request, 
 // Resource: Employee => Device
 router.route("/:id/device/").post(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["employee"], request)) {
+        if (await Token.authorize(["id"], request, false)) {
             const employeeId = request.params.id;
             const deviceObj = request.body;
 
@@ -290,7 +291,7 @@ router.route("/:id/device/").post(Token.authenticate, bodyParser.json(), async (
 // Resource: Employee => Device
 router.route("/:id/device/:device_id").put(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["employee"], request)) {
+        if (await Token.authorize(["id"], request, false)) {
             const employeeId = request.params.id;
             const deviceId = request.params.device_id;
             const deviceUpdate = request.body;
@@ -321,7 +322,7 @@ router.route("/:id/device/:device_id").put(Token.authenticate, bodyParser.json()
 // Resource: Employee => Device
 router.route("/:id/device/:device_id").delete(Token.authenticate, bodyParser.json(), async (request, response) => {
     try {
-        if (await Token.authorize(["employee"], request)) {
+        if (await Token.authorize(["id"], request, false)) {
             const employeeId = request.params.id;
             const deviceId = request.params.device_id;
 
@@ -343,28 +344,5 @@ router.route("/:id/device/:device_id").delete(Token.authenticate, bodyParser.jso
         return response.status(404).json(error.toString());
     }
 });
-
-const callFitbit = async (employeeId: string, endpoint: string) => {
-
-    let employee = await Employee.findById(employeeId);
-
-    employee = employee.toObject();
-
-    if (employee.access_token) {
-        employee.access_token = Encryption.decrypt(employee.access_token);
-    }
-
-    const authStr = `Bearer ${employee.access_token}`;
-
-    const config = {
-        headers: {
-            Authorization: authStr,
-        },
-    };
-
-    const activities = await axios.get(`https://api.fitbit.com/1/user/${employee.user_id}/${endpoint}`, config);
-
-    return activities.data;
-};
 
 export default router;

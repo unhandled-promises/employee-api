@@ -6,6 +6,7 @@ import Token from "./util/auth";
 dotenv.config();
 
 // Import controllers
+import activitiesController from "./activities/activities.controller";
 import authController from "./auth/auth.controller";
 import employeeController from "./employee/employee.controller";
 
@@ -30,6 +31,7 @@ app.use(allowCrossDomain);
 
 // Assign controllers to routes
 app.use("/api/employee", employeeController);
+app.use("/api/activities", activitiesController);
 app.use("/auth", authController);
 
 // Init Token
