@@ -103,9 +103,12 @@ export default class Token {
                     break;
                 case "supervisor":
                     if (request.token.role === "owner" || request.token.role === "manager") {
-                        const employee: IEmployeeDoc = await Employee.findOne({ _id: request.params.id });
-
-                        if (employee.company === request.token.company) {
+                        if (request.method !== "POST") {
+                            const employee: IEmployeeDoc = await Employee.findOne({ _id: request.params.id });
+                            if (employee.company === request.token.company) {
+                                validityCheck = true;
+                            }
+                        } else {
                             validityCheck = true;
                         }
                     }
