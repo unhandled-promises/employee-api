@@ -184,8 +184,13 @@ router.route("/:id/activities").get(Token.authenticate, async (request, response
             let employee = await Employee.findById(employeeId);
             employee = employee.toObject();
             const today = moment().format("YYYY-MM-DD");
-            const activities = await Fitbit.callFitbit(employee, `activities/date/${today}.json`);
-            return response.status(200).json(activities);
+            try {
+                const activities = await Fitbit.callFitbit(employee, `activities/date/${today}.json`);
+                return response.status(200).json(activities);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+
         } else {
             throw Error("No Access");
         }

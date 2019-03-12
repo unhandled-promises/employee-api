@@ -20,8 +20,12 @@ export default class Fitbit {
             },
         };
 
-        const activities = await axios.get(`https://api.fitbit.com/1/user/${employee.user_id}/${endpoint}`, config);
-        activities.data.employeeId = employee.id;
-        return activities.data;
+        try {
+            const response = await axios.get(`https://api.fitbit.com/1/user/${employee.user_id}/${endpoint}`, config);
+            response.data.employeeId = employee.id;
+            return response.data;
+        } catch (error) {
+            throw error.response.data.errors[0];
+        }
     }
 }
