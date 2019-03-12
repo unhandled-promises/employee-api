@@ -19,6 +19,7 @@ passport.use(new FitbitStrategy({
 
         const employeeUpdate = {
             access_token: accessToken,
+            avatar: profile._json.user.avatar150,
             refresh_token: refreshToken,
             user_id: profile.id,
         };
