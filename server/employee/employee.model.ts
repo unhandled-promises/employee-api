@@ -10,6 +10,10 @@ const employeeSchemaDef: SchemaDef<App.Employee> = {
         default: null,
         type: String || null,
     },
+    avatar: {
+        default: null,
+        type: String || null,
+    },
     company: {
         required: true,
         type: Schema.Types.ObjectId,

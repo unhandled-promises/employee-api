@@ -4,6 +4,7 @@ import { MailData } from '@sendgrid/helpers/classes/mail';
 export declare module App {
     export interface Employee {
         access_token: string | null;
+        avatar: string | null,
         company: Schema.Types.ObjectId;
         devices: Array<Device>;
         dob: Date | null;
