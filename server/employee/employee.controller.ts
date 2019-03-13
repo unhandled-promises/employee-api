@@ -153,7 +153,6 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
             if (employee.refresh_token) {
                 employee.refresh_token = Encryption.decrypt(employee.refresh_token);
             }
-
             return response.status(200).json(employee);
         } else {
             throw Error("No Access");
@@ -169,8 +168,12 @@ router.route("/:id/activities/heart").get(Token.authenticate, async (request, re
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
             employee = employee.toObject();
-            const activities = await Fitbit.callFitbit(employee, `activities/heart/date/today/1d.json`);
-            return response.status(200).json(activities);
+            try {
+                const activities = await Fitbit.callFitbit(employee, `activities/heart/date/today/1d.json`);
+                return response.status(200).json(activities);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
         } else {
             throw Error("No Access");
         }
@@ -179,7 +182,87 @@ router.route("/:id/activities/heart").get(Token.authenticate, async (request, re
     }
 });
 
-router.route("/:id/activities").get(Token.authenticate, async (request, response, next) => {
+router.route("/:id/profile").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (await Token.authorize(["employee"], request, false)) {
+            const employeeId = request.params.id;
+            let employee = await Employee.findById(employeeId);
+            employee = employee.toObject();
+            try {
+                const profile = await Fitbit.callFitbit(employee, `profile.json`);
+                return response.status(200).json(profile);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+        } else {
+            throw Error("No Access");
+        }
+    } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/activities/lifetime").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (await Token.authorize(["employee"], request, false)) {
+            const employeeId = request.params.id;
+            let employee = await Employee.findById(employeeId);
+            employee = employee.toObject();
+            try {
+                const activities = await Fitbit.callFitbit(employee, `activities.json`);
+                return response.status(200).json(activities);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+        } else {
+            throw Error("No Access");
+        }
+    } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/friends").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (await Token.authorize(["employee"], request, false)) {
+            const employeeId = request.params.id;
+            let employee = await Employee.findById(employeeId);
+            employee = employee.toObject();
+            try {
+                const friends = await Fitbit.callFitbit(employee, `friends/leaderboard.json`);
+                return response.status(200).json(friends);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+        } else {
+            throw Error("No Access");
+        }
+    } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/badges").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (await Token.authorize(["employee"], request, false)) {
+            const employeeId = request.params.id;
+            let employee = await Employee.findById(employeeId);
+            employee = employee.toObject();
+            try {
+                const badges = await Fitbit.callFitbit(employee, `badges.json`);
+                return response.status(200).json(badges);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+        } else {
+            throw Error("No Access");
+        }
+    } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/activities/today").get(Token.authenticate, async (request, response, next) => {
     try {
         if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
