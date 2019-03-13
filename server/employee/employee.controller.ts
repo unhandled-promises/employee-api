@@ -163,7 +163,7 @@ router.route("/:id").get(Token.authenticate, async (request, response, next) => 
 
 router.route("/:id/activities/heart").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["employee"], request, false)) {
+        if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
             employee = employee.toObject();
@@ -179,7 +179,7 @@ router.route("/:id/activities/heart").get(Token.authenticate, async (request, re
 
 router.route("/:id/activities").get(Token.authenticate, async (request, response, next) => {
     try {
-        if (await Token.authorize(["employee"], request, false)) {
+        if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
             let employee = await Employee.findById(employeeId);
             employee = employee.toObject();
