@@ -92,10 +92,12 @@ router.route("/").post(Token.authenticate, bodyParser.json(), async (request, re
 
             await employee.save();
             const emailContent = {
-                from: "test@special.com",
-                html: `Welcome! Your token is: ${employee.token}`,
-                subject: "Welcome!",
+                from: "noreply@fit2work.life",
                 to: employee.email,
+                templateId: 'd-897fb7dc7d1145d6889f5fc7bebc6cdc',
+                dynamic_template_data: {
+                  code: employee.token,
+                },
             };
 
             Comm.sendEmail(emailContent);
