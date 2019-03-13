@@ -114,6 +114,7 @@ router.route("/init").post(bodyParser.json(), async (request, response) => {
     try {
         const employee = new Employee(request.body);
         employee.role = "owner";
+        employee.registered = true;
         employee.token = Encryption.createVerificationCode();
 
         // Verify company
