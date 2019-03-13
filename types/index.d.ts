@@ -28,8 +28,8 @@ export declare module App {
     export interface Mail extends MailData{
         to: string;
         from: string;
-        subject: string;
-        html: string;
+        templateId: string;
+        dynamic_template_data: object;
     }
 
     export interface Device {
