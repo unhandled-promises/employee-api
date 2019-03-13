@@ -13,7 +13,7 @@ if (useLocalAPI === "true") {
 } else {
     employeesAPI = "https://employee-api-p3.herokuapp.com/";
     customersAPI = "https://customer-api-p3.herokuapp.com/";
-    userInterface = "https://ui-p3.herokuapp.com/";
+    userInterface = "https://www.fit2work.life/";
 }
 
 export const CUSTOMERS_API = customersAPI;
