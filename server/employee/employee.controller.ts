@@ -92,12 +92,12 @@ router.route("/").post(Token.authenticate, bodyParser.json(), async (request, re
 
             await employee.save();
             const emailContent = {
-                from: "noreply@fit2work.life",
-                to: employee.email,
-                templateId: 'd-897fb7dc7d1145d6889f5fc7bebc6cdc',
                 dynamic_template_data: {
-                  code: employee.token,
-                },
+                    code: employee.token,
+                  },
+                from: "noreply@fit2work.life",
+                templateId: "d-897fb7dc7d1145d6889f5fc7bebc6cdc",
+                to: employee.email,
             };
 
             Comm.sendEmail(emailContent);
