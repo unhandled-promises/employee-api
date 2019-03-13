@@ -223,6 +223,26 @@ router.route("/:id/activities/lifetime").get(Token.authenticate, async (request,
     }
 });
 
+router.route("/:id/devices").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (await Token.authorize(["employee"], request, false)) {
+            const employeeId = request.params.id;
+            let employee = await Employee.findById(employeeId);
+            employee = employee.toObject();
+            try {
+                const devices = await Fitbit.callFitbit(employee, `devices.json`);
+                return response.status(200).json(devices);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+        } else {
+            throw Error("No Access");
+        }
+    } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
 router.route("/:id/friends").get(Token.authenticate, async (request, response, next) => {
     try {
         if (await Token.authorize(["employee"], request, false)) {
