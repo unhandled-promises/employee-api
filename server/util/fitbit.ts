@@ -1,9 +1,8 @@
 import axios from "axios";
 import { Document } from "mongoose";
 import { App } from "../../types/index";
-import Encryption from "../util/crypto";
 import Employee from "../employee/employee.model";
-import { response } from "express";
+import Encryption from "../util/crypto";
 
 // Declare model interface
 interface IEmployeeDoc extends App.Employee, Document { }
@@ -34,14 +33,14 @@ export default class Fitbit {
             return response.data;
         } catch (error) {
             const errorType = error.response.data.errors[0].errorType;
-            if(errorType === "expired_token") {
+            if (errorType === "expired_token") {
                 try {
                     console.log("Token expired. Aquiring a new access token");
                     const updatedTokenInfo = await Fitbit.replaceExpiredToken(employee.refresh_token, employeeId);
                     const updatedAccessToken = updatedTokenInfo.access_token;
-                    const retryResponse = await Fitbit.retryFitbitCall(updatedAccessToken, employee.user_id, endpoint);
+                    const retryResponse = await Fitbit.retryFitbitCall(updatedAccessToken, employeeId, endpoint);
                     return retryResponse.data;
-                } catch(error) {
+                } catch (error) {
                     return error.response.data.errors[0];
                 }
             } else {
@@ -50,7 +49,7 @@ export default class Fitbit {
         }
     }
 
-    private static retryFitbitCall = async (accessToken: string, userId: String, endpoint: string) => {
+    private static retryFitbitCall = async (accessToken: string, userId: string, endpoint: string) => {
 
         const authStr = `Bearer ${accessToken}`;
         const config = {
@@ -61,20 +60,19 @@ export default class Fitbit {
         try {
             const response = await axios.get(`https://api.fitbit.com/1/user/${userId}/${endpoint}`, config);
             return response.data;
-        } catch(error) {
+        } catch (error) {
             return error.response.data.errors[0];
         }
     }
 
     private static replaceExpiredToken = async (refreshToken: string, employeeId: string) => {
-        
         const config = {
             headers: {
-                accept: 'application/json',
+                accept: "application/json",
                 auth: {
+                    password: process.env.FITBIT_OAUTH_CLIENT_SECRET,
                     username: process.env.FITBIT_OAUTH_CLIENT_ID,
-                    password: process.env.FITBIT_OAUTH_CLIENT_SECRET
-                }
+                },
             },
         };
         try {
