@@ -167,10 +167,8 @@ router.route("/:id/activities/heart").get(Token.authenticate, async (request, re
     try {
         if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
-            let employee = await Employee.findById(employeeId);
-            employee = employee.toObject();
             try {
-                const activities = await Fitbit.callFitbit(employee, `activities/heart/date/today/1d.json`);
+                const activities = await Fitbit.callFitbit(employeeId, `activities/heart/date/today/1d.json`);
                 return response.status(200).json(activities);
             } catch (error) {
                 return response.status(400).send(error);
@@ -187,10 +185,8 @@ router.route("/:id/profile").get(Token.authenticate, async (request, response, n
     try {
         if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
-            let employee = await Employee.findById(employeeId);
-            employee = employee.toObject();
             try {
-                const profile = await Fitbit.callFitbit(employee, `profile.json`);
+                const profile = await Fitbit.callFitbit(employeeId, `profile.json`);
                 return response.status(200).json(profile);
             } catch (error) {
                 return response.status(400).send(error);
@@ -207,10 +203,8 @@ router.route("/:id/activities/lifetime").get(Token.authenticate, async (request,
     try {
         if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
-            let employee = await Employee.findById(employeeId);
-            employee = employee.toObject();
             try {
-                const activities = await Fitbit.callFitbit(employee, `activities.json`);
+                const activities = await Fitbit.callFitbit(employeeId, `activities.json`);
                 return response.status(200).json(activities);
             } catch (error) {
                 return response.status(400).send(error);
@@ -227,10 +221,8 @@ router.route("/:id/devices").get(Token.authenticate, async (request, response, n
     try {
         if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
-            let employee = await Employee.findById(employeeId);
-            employee = employee.toObject();
             try {
-                const devices = await Fitbit.callFitbit(employee, `devices.json`);
+                const devices = await Fitbit.callFitbit(employeeId, `devices.json`);
                 return response.status(200).json(devices);
             } catch (error) {
                 return response.status(400).send(error);
@@ -247,10 +239,9 @@ router.route("/:id/friends").get(Token.authenticate, async (request, response, n
     try {
         if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
-            let employee = await Employee.findById(employeeId);
-            employee = employee.toObject();
             try {
-                const friends = await Fitbit.callFitbit(employee, `friends/leaderboard.json`);
+                console.log("employeeId: ", employeeId);
+                const friends = await Fitbit.callFitbit(employeeId, `friends/leaderboard.json`);
                 return response.status(200).json(friends);
             } catch (error) {
                 return response.status(400).send(error);
@@ -267,10 +258,8 @@ router.route("/:id/badges").get(Token.authenticate, async (request, response, ne
     try {
         if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
-            let employee = await Employee.findById(employeeId);
-            employee = employee.toObject();
             try {
-                const badges = await Fitbit.callFitbit(employee, `badges.json`);
+                const badges = await Fitbit.callFitbit(employeeId, `badges.json`);
                 return response.status(200).json(badges);
             } catch (error) {
                 return response.status(400).send(error);
@@ -287,11 +276,9 @@ router.route("/:id/activities/today").get(Token.authenticate, async (request, re
     try {
         if (await Token.authorize(["employee", "supervisor"], request, false)) {
             const employeeId = request.params.id;
-            let employee = await Employee.findById(employeeId);
-            employee = employee.toObject();
             const today = moment().format("YYYY-MM-DD");
             try {
-                const activities = await Fitbit.callFitbit(employee, `activities/date/${today}.json`);
+                const activities = await Fitbit.callFitbit(employeeId, `activities/date/${today}.json`);
                 return response.status(200).json(activities);
             } catch (error) {
                 return response.status(400).send(error);

@@ -14,7 +14,7 @@ router.route("/").get(Token.authenticate, async (request, response) => {
 
             employees.map((employee) => {
                 const today = moment().format("YYYY-MM-DD");
-                promises.push(Fitbit.callFitbit(employee, `activities/date/${today}.json`));
+                promises.push(Fitbit.callFitbit(employee.id, `activities/date/${today}.json`));
             });
 
             const results = await Promise.all(promises);
