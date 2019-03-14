@@ -22,7 +22,7 @@ export declare module App {
         sms_consent: Boolean;
         refresh_token: string | null;
         token: String | null;
-        user_id: String | null;
+        user_id: string | null;
     }
 
     export interface Mail extends MailData{
