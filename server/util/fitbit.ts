@@ -10,17 +10,13 @@ interface IEmployeeDoc extends App.Employee, Document { }
 export default class Fitbit {
 
     public static callFitbit = async (employeeId: string, endpoint: string) => {
-
-        console.log("in callFitbit...employeeId is: ", employeeId);
         let employee = await Employee.findById(employeeId);
         employee = employee.toObject();
-        console.log("employee: ", employee);
-
-        if (employee.access_token) {
-            employee.access_token = Encryption.decrypt(employee.access_token);
+        let accessToken = employee.access_token;
+        if (accessToken) {
+            accessToken = Encryption.decrypt(accessToken);
         }
-        console.log("accessToken: ", employee.access_token);
-        const authStr = `Bearer ${employee.access_token}`;
+        const authStr = `Bearer ${accessToken}`;
         const config = {
             headers: {
                 Authorization: authStr,
@@ -29,16 +25,19 @@ export default class Fitbit {
 
         try {
             const response = await axios.get(`https://api.fitbit.com/1/user/${employee.user_id}/${endpoint}`, config);
-            response.data.employeeId = employee.id;
+            response.data.employeeId = employeeId;
             return response.data;
         } catch (error) {
             const errorType = error.response.data.errors[0].errorType;
             if (errorType === "expired_token") {
                 try {
-                    console.log("Token expired. Aquiring a new access token");
-                    const updatedTokenInfo = await Fitbit.replaceExpiredToken(employee.refresh_token, employeeId);
-                    const updatedAccessToken = updatedTokenInfo.access_token;
-                    const retryResponse = await Fitbit.retryFitbitCall(updatedAccessToken, employeeId, endpoint);
+                    let refreshToken = employee.refresh_token;
+                    if (refreshToken) {
+                        refreshToken = Encryption.decrypt(refreshToken);
+                    }
+                    const updatedTokenInfo = await Fitbit.replaceExpiredToken(refreshToken, employeeId);
+                    const updatedAccessToken = updatedTokenInfo.data.access_token;
+                    const retryResponse = await Fitbit.callFitbitWithCredentials(updatedAccessToken, employeeId, endpoint);
                     return retryResponse.data;
                 } catch (error) {
                     return error.response.data.errors[0];
@@ -49,7 +48,7 @@ export default class Fitbit {
         }
     }
 
-    private static retryFitbitCall = async (accessToken: string, userId: string, endpoint: string) => {
+    private static callFitbitWithCredentials = async (accessToken: string, userId: string, endpoint: string) => {
 
         const authStr = `Bearer ${accessToken}`;
         const config = {
@@ -59,30 +58,28 @@ export default class Fitbit {
         };
         try {
             const response = await axios.get(`https://api.fitbit.com/1/user/${userId}/${endpoint}`, config);
-            return response.data;
+            return response;
         } catch (error) {
-            return error.response.data.errors[0];
+            throw error;
         }
     }
 
     private static replaceExpiredToken = async (refreshToken: string, employeeId: string) => {
         const config = {
-            headers: {
-                accept: "application/json",
-                auth: {
-                    password: process.env.FITBIT_OAUTH_CLIENT_SECRET,
-                    username: process.env.FITBIT_OAUTH_CLIENT_ID,
-                },
+            auth: {
+                password: process.env.FITBIT_OAUTH_CLIENT_SECRET,
+                username: process.env.FITBIT_OAUTH_CLIENT_ID,
             },
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
         };
         try {
-            const response = await axios.post(`https://api.fitbit.com/oauth2/token?grant_type=refresh_token&refresh_token=${refreshToken}`, config);
+            const response = await axios.post(`https://api.fitbit.com/oauth2/token?grant_type=refresh_token&refresh_token=${refreshToken}`, {}, config);
             const updatedAccessToken = response.data.access_token;
             const updatedRefreshToken = response.data.refresh_token;
             await Fitbit.updateEmployee(employeeId, updatedAccessToken, updatedRefreshToken);
-            return response.data;
+            return response;
         } catch (error) {
-            return error.response.data.errors[0];
+            throw error;
         }
     }
 
