@@ -31,13 +31,14 @@ export default class Fitbit {
             const errorType = error.response.data.errors[0].errorType;
             if (errorType === "expired_token") {
                 try {
+                    console.log("Token expired. Aquiring a new token");
                     let refreshToken = employee.refresh_token;
                     if (refreshToken) {
                         refreshToken = Encryption.decrypt(refreshToken);
                     }
                     const updatedTokenInfo = await Fitbit.replaceExpiredToken(refreshToken, employeeId);
                     const updatedAccessToken = updatedTokenInfo.data.access_token;
-                    const retryResponse = await Fitbit.callFitbitWithCredentials(updatedAccessToken, employeeId, endpoint);
+                    const retryResponse = await Fitbit.callFitbitWithCredentials(updatedAccessToken, employee.user_id, endpoint);
                     return retryResponse.data;
                 } catch (error) {
                     return error.response.data.errors[0];

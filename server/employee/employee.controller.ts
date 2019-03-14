@@ -240,7 +240,6 @@ router.route("/:id/friends").get(Token.authenticate, async (request, response, n
         if (await Token.authorize(["employee"], request, false)) {
             const employeeId = request.params.id;
             try {
-                console.log("employeeId: ", employeeId);
                 const friends = await Fitbit.callFitbit(employeeId, `friends/leaderboard.json`);
                 return response.status(200).json(friends);
             } catch (error) {
