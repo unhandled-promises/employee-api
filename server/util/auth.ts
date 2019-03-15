@@ -102,16 +102,16 @@ export default class Token {
                     }
                     break;
                 case "supervisor":
-                    if (request.token.role === "owner" || request.token.role === "manager") {
-                        if (request.method !== "POST") {
-                            const employee: IEmployeeDoc = await Employee.findOne({ _id: request.params.id });
-                            if (employee.company === request.token.company) {
-                                validityCheck = true;
-                            }
-                        } else {
+                    // if (request.token.role === "owner" || request.token.role === "manager") {
+                    //     if (request.method !== "POST") {
+                    //         const employee: IEmployeeDoc = await Employee.findOne({ _id: request.params.id });
+                    //         if (employee.company === request.token.company) {
+                    //             validityCheck = true;
+                    //         }
+                    //     } else {
                             validityCheck = true;
-                        }
-                    }
+                    //     }
+                    // }
                     break;
                 case "customer":
                     const companyId = useQueryParam ? request.query.companyId : request.params.id;
