@@ -11,7 +11,11 @@ export default class Fitbit {
 
     public static callFitbit = async (employeeId: string, endpoint: string) => {
         let employee = await Employee.findById(employeeId);
+        if (employee === null) {
+            throw Error(`Employee ${employeeId} does not exist!`);
+        }
         employee = employee.toObject();
+
         let accessToken = employee.access_token;
         if (accessToken) {
             accessToken = Encryption.decrypt(accessToken);

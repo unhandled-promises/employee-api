@@ -171,6 +171,7 @@ router.route("/:id/activities/heart").get(Token.authenticate, async (request, re
                 const activities = await Fitbit.callFitbit(employeeId, `activities/heart/date/today/1d.json`);
                 return response.status(200).json(activities);
             } catch (error) {
+                console.log(error);
                 return response.status(400).send(error);
             }
         } else {
@@ -279,6 +280,46 @@ router.route("/:id/activities/today").get(Token.authenticate, async (request, re
             try {
                 const activities = await Fitbit.callFitbit(employeeId, `activities/date/${today}.json`);
                 return response.status(200).json(activities);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+
+        } else {
+            throw Error("No Access");
+        }
+    } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/activities/steps/month").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (await Token.authorize(["employee", "supervisor"], request, false)) {
+            const employeeId = request.params.id;
+            const today = moment().format("YYYY-MM-DD");
+            try {
+                const steps = await Fitbit.callFitbit(employeeId, `activities/steps/date/today/1m.json`);
+                return response.status(200).json(steps);
+            } catch (error) {
+                return response.status(400).send(error);
+            }
+
+        } else {
+            throw Error("No Access");
+        }
+    } catch (error) {
+        return response.status(404).json(error.toString());
+    }
+});
+
+router.route("/:id/activities/distance/month").get(Token.authenticate, async (request, response, next) => {
+    try {
+        if (await Token.authorize(["employee", "supervisor"], request, false)) {
+            const employeeId = request.params.id;
+            const today = moment().format("YYYY-MM-DD");
+            try {
+                const distance = await Fitbit.callFitbit(employeeId, `activities/distance/date/today/1m.json`);
+                return response.status(200).json(distance);
             } catch (error) {
                 return response.status(400).send(error);
             }
